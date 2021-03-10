@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ruleset>
+	<!-- see https://github.com/WPTT/WPThemeReview/issues/228#issuecomment-545708562 -->
+	<config name="testVersion" value="7.4-"/>
+</ruleset>
