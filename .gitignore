@@ -28,7 +28,7 @@ node_modules/
 wpackio.server.js
 
 # ignore "dist" directory (contains compiled/copied css, js, images, etc. ; managed by webpack through wpack.io)
-dist/
+#dist/
 
 # ignore everything in the "package" directory, except zip files (these directory and files are managed by wpack.io)
 package/*
