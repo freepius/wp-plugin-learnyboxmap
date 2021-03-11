@@ -13,10 +13,7 @@ $dir = \dirname(__FILE__) . '/../';
 $filesPatterns = [
     'learnyboxmap.php' => [
         "Version:           $old" => "Version:           $new",
-    ],
-
-    'includes/class-learnyboxmap.php' => [
-        "this->version     = '$old';" => "this->version     = '$new';",
+        "define( 'LEARNYBOXMAP_VERSION', '$old' );" => "define( 'LEARNYBOXMAP_VERSION', '$new' );",
     ]
 ];
 

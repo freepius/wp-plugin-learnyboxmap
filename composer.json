@@ -1,0 +1,12 @@
+{
+    "autoload": {
+        "psr-4": {
+            "LearnyboxMap\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LearnyboxMap\\Tests\\": "tests/"
+        }
+    }
+}

@@ -27,6 +27,12 @@
 
 defined( 'ABSPATH' ) || die;
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-learnyboxmap.php';
+require __DIR__ . '/vendor/autoload.php';
 
-( new LearnyboxMap() )->run();
+define( 'LEARNYBOXMAP_VERSION', '1.0.0' );
+
+// Plugin activator and desactivator.
+register_activation_hook( __FILE__, array( 'LearnyboxMap', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'LearnyboxMap', 'desactivate' ) );
+
+new LearnyboxMap\Main();
