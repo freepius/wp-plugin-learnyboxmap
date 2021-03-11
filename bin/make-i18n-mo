@@ -1,0 +1,5 @@
+#!/bin/bash
+for file in `find ./languages -name "*.po"`
+do
+    msgfmt -o ${file/.po/.mo} $file
+done

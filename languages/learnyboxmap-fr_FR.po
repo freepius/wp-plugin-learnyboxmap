@@ -1,0 +1,63 @@
+# Copyright (C) 2021 freepius
+# This file is distributed under the GPL-3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: LearnyboxMap 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/learnyboxmap\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-03-10T14:43:21+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0-alpha-59d879d\n"
+"X-Domain: learnyboxmap\n"
+
+#. Plugin Name of the plugin
+msgid "LearnyboxMap"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/freepius/wp-plugin-learnybox-map"
+msgstr ""
+
+#. Description of the plugin
+msgid "LearnyboxMap allows your LearnyBox members to be displayed on an interactive map and see other members there."
+msgstr ""
+
+#. Author of the plugin
+msgid "freepius"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://freepius.net"
+msgstr ""
+
+#: src/AdminSettings.php:29
+msgid "Settings for the LearnyboxMap plugin"
+msgstr "Réglages pour l'extension Learnybox Map"
+
+#: src/AdminSettings.php:30
+msgid "Settings"
+msgstr "Réglages"
+
+#: src/AdminSettings.php:53
+msgid "LearnyBox API settings"
+msgstr "Paramètres de votre API LearnyBox"
+
+#: src/AdminSettings.php:59
+msgid "Your LearnyBox API key"
+msgstr "Votre clé API LearnyBox"
+
+#: src/AdminSettings.php:60
+msgid "Your LearnyBox URL"
+msgstr "L'adresse de votre LearnyBox"
+
+#: src/AdminSettings.php:76
+msgid "section_api_help"
+msgstr "Les paramètres à saisir sont à retrouver dans votre compte LearnyBox, section Learny Connect."
+
+#: src/AdminSettings.php:95
+msgid "Error: the URL entered doesn't follow the expected pattern \"https://{your-sub-domain}.learnybox.com/\""
+msgstr "Erreur : l'adresse saisie n'a pas la forme attendue \"https://{votre-sous-domaine}.learnybox.com/\""

@@ -57,7 +57,7 @@ class AdminSettings {
 
 		$fields = array(
 			self::API_KEY => array( 'api', __( 'Your LearnyBox API key', 'learnyboxmap' ) ),
-			self::API_URL => array( 'api', __( 'Base URL for your LearnyBox API calls', 'learnyboxmap' ) ),
+			self::API_URL => array( 'api', __( 'Your LearnyBox URL', 'learnyboxmap' ) ),
 		);
 
 		foreach ( $fields as $field => list($section, $title) ) {
@@ -73,7 +73,7 @@ class AdminSettings {
 	}
 
 	public function section_api() {
-		echo '<p>' . esc_html__( 'Here, @TODO your help for this section.', 'learnyboxmap' ) . '</p>';
+		echo '<p>' . esc_html__( 'section_api_help', 'learnyboxmap' ) . '</p>';
 		settings_errors( self::API_KEY );
 	}
 
@@ -86,13 +86,13 @@ class AdminSettings {
 	}
 
 	public function sanitize_api_url( string $input ) {
-		$input = trailingslashit( $input );
+		$input = trailingslashit( esc_url_raw( $input ) );
 
 		if ( 'https://' !== substr( $input, 0, 8 ) || '.learnybox.com/' !== substr( $input, -15 ) || strlen( $input ) < 24 ) {
 			add_settings_error(
 				self::API_KEY,
 				self::API_KEY,
-				__( 'Error : the URL entered doesn\'t follow the expected pattern "https://{your-sub-domain}.learnybox.com/"', 'learnyboxmap' )
+				__( 'Error: the URL entered doesn\'t follow the expected pattern "https://{your-sub-domain}.learnybox.com/"', 'learnyboxmap' )
 			);
 		}
 
