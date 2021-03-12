@@ -11,7 +11,7 @@ namespace LearnyboxMap;
  */
 class Admin {
 	public function __construct() {
-		// Add the plugin admin menu only for administrators (ie, having 'manage_options' capability).
+		// Add the plugin admin menu for administrators only.
 		add_action( 'admin_menu', array( $this, 'menu_add' ) );
 
 		// Settings management.
@@ -23,7 +23,7 @@ class Admin {
 		add_menu_page(
 			'LearnyBox Map',
 			'LearnyBox Map',
-			'manage_options',
+			'administrator',
 			'learnyboxmap',
 			array( $this, 'members_page' ),
 			plugins_url( 'learnyboxmap/dist/images/learnybox-icon-20x20.png' ),

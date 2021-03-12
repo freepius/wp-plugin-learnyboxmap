@@ -32,7 +32,7 @@ require __DIR__ . '/vendor/autoload.php';
 define( 'LEARNYBOXMAP_VERSION', '1.0.0' );
 
 // Plugin activator and desactivator.
-register_activation_hook( __FILE__, array( 'LearnyboxMap', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'LearnyboxMap', 'desactivate' ) );
+register_activation_hook( __FILE__, array( 'LearnyboxMap\Main', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'LearnyboxMap\Main', 'desactivate' ) );
 
 new LearnyboxMap\Main();

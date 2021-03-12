@@ -22,11 +22,11 @@ class Main {
 	}
 
 	public static function activate(): void {
-
+		( new Members() )->create_sql_table();
 	}
 
 	public static function desactivate(): void {
-
+		( new Members() )->drop_sql_table();
 	}
 
 	public function load_textdomain(): void {

@@ -28,7 +28,7 @@ class AdminSettings {
 			'learnyboxmap',
 			__( 'Settings for the LearnyboxMap plugin', 'learnyboxmap' ),
 			__( 'Settings', 'learnyboxmap' ),
-			'manage_options',
+			'administrator',
 			'learnyboxmap-settings',
 			array( $this, 'page' )
 		);
