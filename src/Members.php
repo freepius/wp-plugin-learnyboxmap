@@ -49,6 +49,6 @@ class Members {
 		global $wpdb;
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL
-		$wpdb->query( "DROP TABLE `{$this->get_sql_table_name()}`;" );
+		$wpdb->query( "DROP TABLE IF EXISTS `{$this->get_sql_table_name()}`;" );
 	}
 }

@@ -5,8 +5,7 @@ namespace LearnyboxMap;
 /**
  * The core plugin class.
  *
- * This is used to define activator, desactivator, internationalization, admin-specific hooks, and
- * public-facing site hooks.
+ * This is used to internationalization, admin-specific hooks, and public-facing site hooks.
  *
  * @since      1.0.0
  * @package    LearnyboxMap
@@ -19,14 +18,6 @@ class Main {
 
 		// Admin-specific hooks.
 		new Admin();
-	}
-
-	public static function activate(): void {
-		( new Members() )->create_sql_table();
-	}
-
-	public static function desactivate(): void {
-		( new Members() )->drop_sql_table();
 	}
 
 	public function load_textdomain(): void {
