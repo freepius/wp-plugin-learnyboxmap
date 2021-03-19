@@ -35,12 +35,16 @@ class AdminSettings {
 	}
 
 	public function page() {
-		echo '<form action="options.php" method="post">' .
-				'<h1>' . esc_html( get_admin_page_title() ) . '</h1>';
+		echo '
+		<div class="wrap">
+			<h1>' . esc_html( get_admin_page_title() ) . '</h1>
+			<form action="options.php" method="post">';
 				settings_fields( 'learnyboxmap' );
 				do_settings_sections( 'learnyboxmap-settings' );
 				submit_button();
-		echo '</form>';
+		echo '
+			</form>
+		</div>';
 	}
 
 	public function init() {

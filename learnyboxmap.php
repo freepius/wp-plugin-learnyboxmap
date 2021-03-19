@@ -30,7 +30,8 @@ defined( 'ABSPATH' ) || die;
 require __DIR__ . '/vendor/autoload.php';
 
 define( 'LEARNYBOXMAP_VERSION', '1.0.0' );
+define( 'LEARNYBOXMAP_PATH', plugin_dir_path( __FILE__ ) );
+define( 'LEARNYBOXMAP_URL', plugin_dir_url( __FILE__ ) );
 
-LearnyboxMap\Activation::init( __FILE__ );
-
+new LearnyboxMap\Activation( __FILE__ );
 new LearnyboxMap\Main();

@@ -10,6 +10,8 @@ namespace LearnyboxMap;
  * @author     freepius
  */
 class Admin {
+	public const MENU = 'learnyboxmap';
+
 	public function __construct() {
 		// Add the plugin admin menu for administrators only.
 		add_action( 'admin_menu', array( $this, 'menu_add' ) );
@@ -18,15 +20,16 @@ class Admin {
 		new AdminSettings();
 	}
 
-	public function menu_add() {
+	public function menu_add(): void {
 		// Menu to manage the LearnyBox members displayed on the map.
 		add_menu_page(
 			'LearnyBox Map',
 			'LearnyBox Map',
 			'administrator',
-			'learnyboxmap',
+			self::MENU,
 			array( $this, 'members_page' ),
-			plugins_url( 'learnyboxmap/dist/images/learnybox-icon-20x20.png' ),
+			LEARNYBOXMAP_URL . 'assets/images/learnybox-icon-20x20.png',
+			26 // Just after the Comments menu entry (order === 25).
 		);
 	}
 }

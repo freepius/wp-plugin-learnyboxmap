@@ -14,13 +14,20 @@ namespace LearnyboxMap;
 class Main {
 	public function __construct() {
 		// Loads the internationalization files.
-		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_action( 'init', array( $this, 'load_textdomains' ) );
+
+		// Load the Custom Post Types.
+		add_action( 'init', array( $this, 'load_custom_post_types' ) );
 
 		// Admin-specific hooks.
 		new Admin();
 	}
 
-	public function load_textdomain(): void {
+	public function load_textdomains(): void {
 		load_plugin_textdomain( 'learnyboxmap', false, 'learnyboxmap/languages/' );
+	}
+
+	public static function load_custom_post_types(): void {
+		new PostType\Member();
 	}
 }
