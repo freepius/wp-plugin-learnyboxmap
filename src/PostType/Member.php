@@ -18,7 +18,7 @@ class Member {
 	/**
 	 * Get the CPT full name (ie with the plugin prefix).
 	 */
-	protected function name(): string {
+	public static function name(): string {
 		return 'learnyboxmap_member';
 	}
 
@@ -37,7 +37,8 @@ class Member {
 			'name'          => _x( 'LearnyBox Members', 'Post type general name', 'learnyboxmap' ),
 			'singular_name' => _x( 'LearnyBox Member', 'Post type singular name', 'learnyboxmap' ),
 			'menu_name'     => _x( 'Members', 'Admin Menu text', 'learnyboxmap' ),
-			'add_new_item'  => __( 'Add a new LearnyBox Member', 'learnyboxmap' ),
+			'add_new_item'  => __( 'Add New LearnyBox Member', 'learnyboxmap' ),
+			'edit_item'     => __( 'Edit LearnyBox Member', 'learnyboxmap' ),
 			'search_items'  => __( 'Search members', 'learnyboxmap' ),
 			'not_found'     => __( 'No members found.', 'learnyboxmap' ),
 		);
@@ -48,13 +49,14 @@ class Member {
 	 */
 	protected function definition(): array {
 		return array(
-			'description'      => __( 'Represents a LearnyBox Member', 'learnyboxmap' ),
-			'labels'           => $this->labels(),
-			'public'           => true,
-			'show_in_menu'     => \LearnyboxMap\Admin::MENU,
-			'menu_icon'        => 'dashicons-groups',
-			'rewrite'          => array( 'slug' => $this->slug() ),
-			'supports'         => array( 'title', 'editor' ),
+			'description'       => __( 'Represents a LearnyBox Member', 'learnyboxmap' ),
+			'labels'            => $this->labels(),
+			'public'            => true,
+			'show_in_menu'      => \LearnyboxMap\Admin::MENU,
+			'show_in_admin_bar' => false,
+			'menu_icon'         => 'dashicons-groups',
+			'rewrite'           => array( 'slug' => $this->slug() ),
+			'supports'          => array( 'title', 'editor' ),
 		);
 	}
 }

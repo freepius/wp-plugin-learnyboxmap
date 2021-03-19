@@ -21,10 +21,13 @@ class Main {
 
 		// Admin-specific hooks.
 		new Admin();
+
+		// Init hooks for the public, stand-alone "Members Map" page.
+		new Page\MembersMap();
 	}
 
 	public function load_textdomains(): void {
-		load_plugin_textdomain( 'learnyboxmap', false, 'learnyboxmap/languages/' );
+		load_plugin_textdomain( 'learnyboxmap', false, LEARNYBOXMAP_REL_PATH . 'languages/' );
 	}
 
 	public static function load_custom_post_types(): void {
