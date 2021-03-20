@@ -16,8 +16,8 @@ class Admin {
 		// Add the plugin admin menu for administrators only.
 		add_action( 'admin_menu', array( $this, 'menu_add' ) );
 
-		// Settings management.
-		new AdminSettings();
+		// Init hooks for settings adminstration.
+		new Settings();
 	}
 
 	public function menu_add(): void {
