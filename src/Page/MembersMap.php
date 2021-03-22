@@ -3,7 +3,7 @@
 namespace LearnyboxMap\Page;
 
 /**
- * Functionalities and hooks to handle the "Members Map" page.
+ * Functionalities and hooks to manage the "Members Map" page.
  *
  * This page is PUBLIC, STAND-ALONE (ie with its own html) and contains:
  * 1) A Leaflet map showing all LearnyBox members already registered on it.
@@ -45,5 +45,7 @@ class MembersMap {
 			$email  = sanitize_email( $wp->query_vars['member'] );
 			$member = $repo->get_by_email( $email ) ?? $repo->synchronize_by_email( $email );
 		}
+
+		exit;
 	}
 }
