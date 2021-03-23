@@ -18,9 +18,9 @@ class LearnyBox {
 	/**
 	 * WordPress Transients API is used to cache:
 	 * -> the access and refresh tokens (for the authentication process)
-	 * -> and some data to avoid requesting them again to early
+	 * -> and some 'heavy' data to avoid requesting them again to early
 	 */
-	protected const TRANSIENT = 'learnyboxmap_api';
+	protected const TRANSIENT_AUTH = 'learnyboxmap_api_auth';
 
 	protected string $url;
 	protected string $key;
@@ -40,9 +40,54 @@ class LearnyBox {
 	 * Retrieve all members of a given training.
 	 *
 	 * @param integer $training_id The training ID.
+	 *
+	 * @return \Generator<\stdClass> Return a generator of LearnyBox members.
 	 */
-	public function get_all_members_by_training_id( int $training_id ) {
-		$response = $this->request( 'get', "formations/$training_id/membres/" );
+	public function get_all_members_by_training_id( int $training_id ): \Generator {
+		return $this->get_all( "formations/$training_id/membres/" );
+	}
+
+	/**
+	 * Get all data of a given GET route of LearnyBox API: first from cache, then through API requests.
+	 *
+	 * For performance, API responses are cached (in a WP transient, for one day max).
+	 * So if API responses are already/still in the cache, data are retrieved from it first.
+	 * Otherwise, data are retrieved from several API requests (of 500 items each).
+	 * In both cases (cache or requests), last request is always replayed in order to retrieve any new data.
+	 *
+	 * @param string $route The LearnyBox API GET route to request.
+	 *
+	 * @return \Generator<\stdClass> Return a generator of LearnyBox API response data.
+	 */
+	protected function get_all( string $route ): \Generator {
+		$offset           = 0;
+		$limit            = 500;
+		$transient_id     = __CLASS__ . __FUNCTION__ . $route;
+		$cached_responses = get_transient( $transient_id ) ?: array();
+
+		// Do not keep the last API response.
+		array_pop( $cached_responses );
+
+		// Consume first the cached API responses if there are.
+		foreach ( $cached_responses as $response ) {
+			$offset += $limit;
+			yield from $response->data;
+		}
+
+		while (
+			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition
+			null !== ( $response = $this->request( 'get', "$route?limit=$limit&offset=$offset" ) )
+			&&
+			array() !== $response->data
+		) {
+			$offset += $limit;
+
+			// Store API response in the cache (for one day max).
+			$cached_responses[] = $response;
+			set_transient( $transient_id, $cached_responses, 60 * 60 * 24 );
+
+			yield from $response->data;
+		}
 	}
 
 	/**
@@ -82,7 +127,7 @@ class LearnyBox {
 
 	/**
 	 * From the return of a wp_remote_request() call,
-	 * retrieve the data of a LearnyBox API response
+	 * retrieve the content of a LearnyBox API response
 	 * or return a \WP_Error (if any errors occur).
 	 *
 	 * @param array|\WP_Error $response Value returned by wp_remote_request().
@@ -97,7 +142,7 @@ class LearnyBox {
 		$message = $body->message ?? wp_remote_retrieve_response_message( $response );
 
 		return ( $code >= 200 && $code < 300 )
-		? $body->data
+		? $body
 		: new \WP_Error( $code, $message );
 	}
 
@@ -107,7 +152,7 @@ class LearnyBox {
 	 * -> or sending an authentication request.
 	 */
 	protected function get_access_token(): string {
-		return get_transient( self::TRANSIENT )->access_token ?? $this->authenticate();
+		return get_transient( self::TRANSIENT_AUTH )->access_token ?? $this->authenticate();
 	}
 
 	/**
@@ -129,13 +174,13 @@ class LearnyBox {
 		: array(
 			'body' => array(
 				'grant_type'    => 'refresh_token',
-				'refresh_token' => get_transient( self::TRANSIENT )->refresh_token ?? null,
+				'refresh_token' => get_transient( self::TRANSIENT_AUTH )->refresh_token ?? null,
 			),
 		);
 
 		$response = $this->request( 'post', 'oauth/token/', $args, false );
 
-		set_transient( self::TRANSIENT, $response, $response->expires_in );
+		set_transient( self::TRANSIENT_AUTH, $response->data, $response->data->expires_in );
 
 		return $response->access_token;
 	}
