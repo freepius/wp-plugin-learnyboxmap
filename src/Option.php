@@ -17,20 +17,28 @@ class Option {
 	public const NAME = 'learnyboxmap_options';
 
 	// List of all the available options.
-	protected const AVAILABLE = array( 'api_key', 'api_url' );
+	protected const AVAILABLE = array( 'api_key', 'api_url', 'training_id' );
+
+	/**
+	 * Check if a given option is available for this plugin. If not, throw an exception.
+	 *
+	 * @param string $option The option to check.
+	 * @throws \InvalidArgumentException If $option is not a valid one for this plugin.
+	 */
+	protected static function check_option_exists( string $option ): void {
+		if ( ! in_array( $option, self::AVAILABLE, true ) ) {
+			throw new \InvalidArgumentException( "'$option' is not a valid LearnyboxMap plugin option." );
+		}
+	}
 
 	/**
 	 * Return the full name of an option (used by the Settings class).
 	 *
 	 * @param string $option Option name.
 	 * @return string
-	 * @throws \InvalidArgumentException If $option is not a valid one for this plugin.
 	 */
 	public static function name( string $option ): string {
-		if ( ! in_array( $option, self::AVAILABLE, true ) ) {
-			throw new \InvalidArgumentException( "'$option' is not a valid LearnyboxMap plugin option." );
-		}
-
+		self::check_option_exists( $option );
 		return sprintf( '%s[%s]', self::NAME, $option );
 	}
 
@@ -38,28 +46,21 @@ class Option {
 	 * Return the value of an option.
 	 *
 	 * @param string $option Name of the option to get.
-	 * @throws \InvalidArgumentException If $option is not a valid one for this plugin.
 	 */
 	public static function get( string $option ) {
-		if ( ! in_array( $option, self::AVAILABLE, true ) ) {
-			throw new \InvalidArgumentException( "'$option' is not a valid LearnyboxMap plugin option." );
-		}
-
-		return get_option( self::NAME )[ $option ] ?? '';
+		self::check_option_exists( $option );
+		return get_option( self::NAME )[ $option ] ?? null;
 	}
 
 	/**
 	 * Sanitize a given value for an option.
 	 *
 	 * @param string $option Option name.
-	 * @param any    $value  Value to sanitize.
-	 * @return true|string
-	 * @throws \InvalidArgumentException If $option is not a valid one for this plugin.
+	 * @param mixed  $value  Value to sanitize (passed by reference and modified if necessary).
+	 * @return true|string If any error/s occur, return the error message/s. Otherwise, return true.
 	 */
 	public static function sanitize( string $option, &$value ) {
-		if ( ! in_array( $option, self::AVAILABLE, true ) ) {
-			throw new \InvalidArgumentException( "'$option' is not a valid LearnyboxMap plugin option." );
-		}
+		self::check_option_exists( $option );
 
 		if ( method_exists( self::class, "sanitize_$option" ) ) {
 			return self::{"sanitize_$option"}( $value );
