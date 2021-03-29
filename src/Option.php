@@ -55,27 +55,33 @@ class Option {
 	/**
 	 * Sanitize a given value for an option.
 	 *
-	 * @param string $option Option name.
-	 * @param mixed  $value  Value to sanitize (passed by reference and modified if necessary).
-	 * @return true|string If any error/s occur, return the error message/s. Otherwise, return true.
+	 * @param  string $option Option name.
+	 * @param  string $value  Value to sanitize.
+	 * @return string         Sanitized value.
+	 * @throws \InvalidArgumentException If the value cannot be sanitized and stays dirty (includes a comprehensible error message).
 	 */
-	public static function sanitize( string $option, &$value ) {
+	public static function sanitize( string $option, string $value ): string {
 		self::check_option_exists( $option );
-
-		if ( method_exists( self::class, "sanitize_$option" ) ) {
-			return self::{"sanitize_$option"}( $value );
-		}
-
-		return true;
+		return method_exists( self::class, "sanitize_$option" ) ? self::{"sanitize_$option"}( $value ) : $value;
 	}
 
-	protected static function sanitize_api_url( &$value ) {
+	protected static function sanitize_api_url( string $value ): string {
 		$value = trailingslashit( esc_url_raw( $value ) );
 
-		if ( 'https://' !== substr( $value, 0, 8 ) || '.learnybox.com/' !== substr( $value, -15 ) || strlen( $value ) < 24 ) {
-			return __( 'Error: the URL entered doesn\'t follow the expected pattern "https://{your-sub-domain}.learnybox.com/"', 'learnyboxmap' );
+		if ( 'https://' === substr( $value, 0, 8 ) && '.learnybox.com/' === substr( $value, -15 ) && strlen( $value ) >= 24 ) {
+			return $value;
 		}
 
-		return true;
+		throw new \InvalidArgumentException(
+			__( 'The URL does not follow the expected pattern "https://{your-sub-domain}.learnybox.com/"', 'learnyboxmap' )
+		);
+	}
+
+	protected static function sanitize_training_id( string $value ): string {
+		if ( is_numeric( $value ) && (int) $value >= 0 ) {
+			return $value;
+		}
+
+		throw new \InvalidArgumentException( __( 'The training ID is not a valid numeric value (must be positive or null)', 'learnyboxmap' ) );
 	}
 }

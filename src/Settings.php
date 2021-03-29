@@ -67,8 +67,8 @@ class Settings {
 		);
 
 		$fields = array(
-			'api_key'     => array( 'learnybox', __( 'Your LearnyBox API key', 'learnyboxmap' ) ),
-			'api_url'     => array( 'learnybox', __( 'Your LearnyBox URL', 'learnyboxmap' ) ),
+			'api_key'     => array( 'learnybox', __( 'Your LearnyBox API key', 'learnyboxmap' ), array() ),
+			'api_url'     => array( 'learnybox', __( 'Your LearnyBox URL', 'learnyboxmap' ), array() ),
 			// phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 			'training_id' => array( 'learnybox', __( 'ID of one of your LearnyBox trainings', 'learnyboxmap' ), array( 'type' => 'integer', 'min' => 0 ) ),
 		);
@@ -77,7 +77,7 @@ class Settings {
 			add_settings_field(
 				$option,
 				$title,
-				fn () => $this->input( $option, $input_attrs ?? array() ),
+				fn () => $this->input( $option, $input_attrs ),
 				self::PAGE,
 				$section,
 				array( 'label_for' => $option )
@@ -133,10 +133,10 @@ class Settings {
 	 */
 	public function sanitize( array $input ): array {
 		foreach ( $input as $option => &$value ) {
-			$msg = Option::sanitize( $option, $value );
-
-			if ( is_string( $msg ) ) {
-				add_settings_error( $option, $option, $msg );
+			try {
+				$value = Option::sanitize( $option, $value );
+			} catch ( \InvalidArgumentException $e ) {
+				add_settings_error( $option, $option, __( 'Error:', 'learnyboxmap' ) . ' ' . $e->getMessage() );
 			}
 		}
 
