@@ -23,7 +23,7 @@ class Main {
 		new Admin();
 
 		// Init hooks for the public, stand-alone "Members Map" page.
-		new Page\MembersMap();
+		new Controller\MembersMap();
 	}
 
 	public function load_textdomains(): void {
@@ -31,6 +31,6 @@ class Main {
 	}
 
 	public static function load_custom_post_types(): void {
-		new PostType\Member();
+		new Entity\PostType\Member();
 	}
 }

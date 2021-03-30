@@ -1,10 +1,10 @@
 <?php
 
-namespace LearnyboxMap\Repository;
+namespace LearnyboxMap\Repository\PostType;
 
 use LearnyboxMap\Option;
 use LearnyboxMap\Api\LearnyBox as LearnyBoxAPI;
-use LearnyboxMap\PostType\Member as MemberType;
+use LearnyboxMap\Entity\PostType\Member as MemberPostType;
 
 /**
  * Functionalities to manage the LearnyBox members, ie:
@@ -40,7 +40,7 @@ class Member {
 
 		$member = new \WP_Query(
 			array(
-				'post_type'      => MemberType::name(),
+				'post_type'      => MemberPostType::name(),
 				'post_status'    => array( 'publish', 'draft' ),
 				'posts_per_page' => 1,
 				'name'           => $email,
@@ -59,7 +59,7 @@ class Member {
 	protected function get_by_learnybox_user_id( int $user_id ): ?\WP_Post {
 		$member = new \WP_Query(
 			array(
-				'post_type'      => MemberType::name(),
+				'post_type'      => MemberPostType::name(),
 				'post_status'    => array( 'publish', 'draft' ),
 				'posts_per_page' => 1,
 				'post_parent'    => $user_id,
@@ -149,7 +149,7 @@ class Member {
 	 */
 	protected function transform_from_api_to_wp( \stdClass $api_data ): array {
 		return array(
-			'post_type'    => MemberType::name(),
+			'post_type'    => MemberPostType::name(),
 			'post_title'   => $api_data->_string,
 			'post_name'    => $api_data->email,
 			'post_parent'  => (int) $api_data->user_id,

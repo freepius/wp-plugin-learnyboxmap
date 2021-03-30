@@ -1,13 +1,13 @@
 <?php
 
-namespace LearnyboxMap\PostType;
+namespace LearnyboxMap\Entity\PostType;
 
 /**
  * Functionalities for the CPT representing a LearnyBox Member.
  *
  * @since      1.0.0
  * @package    LearnyboxMap
- * @subpackage PostType
+ * @subpackage Entity
  * @author     freepius
  */
 class Member {
