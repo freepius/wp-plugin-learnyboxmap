@@ -37,11 +37,22 @@ class LearnyBox {
 	}
 
 	/**
-	 * Retrieve all members of a given training.
+	 * Get one member by his unique user ID.
+	 *
+	 * @param integer $user_id The user ID.
+	 * @return \stdClass All the member data.
+	 * @api
+	 */
+	public function get_one_member_by_id( int $user_id ): \stdClass {
+		return (object) $this->request( 'get', "users/$user_id/" )->data;
+	}
+
+	/**
+	 * Get all members of a given training.
 	 *
 	 * @param integer $training_id The training ID.
-	 *
 	 * @return \Generator<\stdClass> Return a generator of LearnyBox members.
+	 * @api
 	 */
 	public function get_all_members_by_training_id( int $training_id ): \Generator {
 		return $this->get_all( "formations/$training_id/membres/" );
@@ -63,7 +74,7 @@ class LearnyBox {
 		$offset           = 0;
 		$limit            = 500;
 		$transient_id     = __CLASS__ . __FUNCTION__ . $route;
-		$cached_responses = get_transient( $transient_id ) ?: array();
+		$cached_responses = (array) get_transient( $transient_id );
 
 		// Do not keep the last API response.
 		array_pop( $cached_responses );
@@ -182,6 +193,6 @@ class LearnyBox {
 
 		set_transient( self::TRANSIENT_AUTH, $response->data, $response->data->expires_in );
 
-		return $response->access_token;
+		return $response->data->access_token;
 	}
 }
