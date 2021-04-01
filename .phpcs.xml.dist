@@ -47,7 +47,7 @@
 	<ruleset>
 		<rule ref="PSR1"/>
 		<rule ref="PSR12"/>
-    	<include-pattern>bin/change-plugin-version.php</include-pattern>
+		<include-pattern>bin/change-plugin-version.php</include-pattern>
 	</ruleset>
 
 	<!--
@@ -58,6 +58,7 @@
 
 	<rule ref="WordPress">
     	<exclude-pattern>bin/change-plugin-version.php</exclude-pattern>
+
         <exclude name="Squiz.Commenting.FileComment.Missing"/>
         <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
         <exclude name="Squiz.Commenting.VariableComment.Missing"/>
