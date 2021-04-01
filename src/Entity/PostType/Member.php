@@ -56,7 +56,7 @@ class Member {
 			'show_in_admin_bar' => false,
 			'menu_icon'         => 'dashicons-groups',
 			'rewrite'           => array( 'slug' => $this->slug() ),
-			'supports'          => array( 'title', 'editor' ),
+			'supports'          => array( 'title', 'editor', 'custom-fields' ),
 		);
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace LearnyboxMap\Page;
+namespace LearnyboxMap\Controller;
 
 /**
  * Functionalities and hooks to manage the "Members Map" page.
@@ -13,7 +13,7 @@ namespace LearnyboxMap\Page;
  *
  * @since      1.0.0
  * @package    LearnyboxMap
- * @subpackage Page
+ * @subpackage Controller
  * @author     freepius
  */
 class MembersMap {
@@ -39,13 +39,17 @@ class MembersMap {
 		if ( ! isset( $wp->query_vars['learnyboxmap_page_membersmap'] ) ) {
 			return;
 		}
+		\LearnyboxMap\Asset::enqueue_css_js( 'members-map' );
 
-		if ( isset( $wp->query_vars['member'] ) ) {
-			$repo   = new \LearnyboxMap\Repository\Member();
-			$email  = sanitize_email( $wp->query_vars['member'] );
-			$member = $repo->get_by_email( $email ) ?? $repo->synchronize_by_email( $email );
-		}
+		$repo = new \LearnyboxMap\Repository\PostType\Member();
 
+		// Variables/data sent to template.
+		$v                           = new \stdClass();
+		$v->email                    = $wp->query_vars['member'] ?? null;
+		$v->member                   = $v->email ? $repo->get_by_email( $v->email ) : null;
+		$v->is_registration_complete = 'publish' === get_post_status( $v->member );
+
+		\LearnyboxMap\Template::render( 'members_map/main', $v );
 		exit;
 	}
 }

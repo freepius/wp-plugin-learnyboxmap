@@ -13,15 +13,18 @@ use LearnyboxMap\Entity\PostType\Member as MemberPostType;
  * - Get all the members
  *
  * For performance purposes, LearnyBox Member data are stored in a WordPress custom post as follows:
- * - post `title` receives:     first and last name
+ * - post `title` receives:     name to display on the map (commonly the first and last name, or nickname)
  * - post `name/slug` receives: slugify email
  * - post `parent ID` receives: *user_id*
+ * - post `content` receives:   text describing the member, his activities, contact details, etc.
  * - post `metadata` receive:   raw email and full address
  *
  * @since      1.0.0
  * @package    LearnyboxMap
  * @subpackage Repository
  * @author     freepius
+ *
+ * @fixme STRONG! Collision between 2 post names/slugs is too easy. Search $email in metadata? (not very efficient...)
  */
 class Member {
 	/**
@@ -96,10 +99,8 @@ class Member {
 					$api->get_one_member_by_id( $partial_member->user->user_id )
 				);
 
-				$post = $this->update_if_exists_by_learnybox_user_id( $member )
-						?? $this->create( $member );
-
-				return get_post( $post, \OBJECT, 'display' );
+				return $this->update_if_exists_by_learnybox_user_id( $member )
+					?? $this->create( $member );
 			}
 		}
 
@@ -154,8 +155,8 @@ class Member {
 			'post_name'    => $api_data->email,
 			'post_parent'  => (int) $api_data->user_id,
 			'meta_input'   => array(
-				'email'   => $api_data->email,
-				'address' => sprintf(
+				'email'       => $api_data->email,
+				'geo_address' => sprintf(
 					'%s, %s %s, %s',
 					$api_data->user_configs->adresse->value,
 					$api_data->user_configs->code_postal->value,

@@ -89,7 +89,7 @@ class Settings {
 	 * Print a help message for the 'learnybox' section.
 	 */
 	public function section_learnybox(): void {
-		echo '<p>' . esc_html__( 'section_learnybox_help', 'learnyboxmap' ) . '</p>';
+		echo '<p>' . esc_html__( 'admin.settings.section_learnybox_help', 'learnyboxmap' ) . '</p>';
 	}
 
 	/**
