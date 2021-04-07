@@ -59,4 +59,22 @@ class Member {
 			'supports'          => array( 'title', 'editor', 'custom-fields' ),
 		);
 	}
+
+	/**
+	 * Delete all the posts of the custom type.
+	 * This function should be called during plugin uninstallation.
+	 */
+	public static function delete_posts(): void {
+		// We cannot use get_posts() because the type might not be registered when this function is called.
+		$query = new \WP_Query(
+			array(
+				'post_type' => static::name(),
+				'nopaging'  => true,
+			)
+		);
+
+		foreach ( $query->posts as $post ) {
+			wp_delete_post( $post->ID, true );
+		}
+	}
 }
