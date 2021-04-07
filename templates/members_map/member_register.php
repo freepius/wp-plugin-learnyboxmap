@@ -1,3 +1,20 @@
+<?php
+/**
+ * Render a form allowing a LearnyBox Member to register on the Members Map.
+ *
+ * @since      1.0.0
+ * @package    LearnyboxMap
+ * @subpackage templates
+ * @author     freepius
+ * @see        *members_map/main* template
+ *
+ * @global array         $vars          All the below/template variables
+ * @global \Wp_Post|null $member        Current member
+ * @global string        $consent_text  The consent text for registration.
+ * @global \WP_Term[]    $categories    The available member categories.
+ */
+
+?>
 <h2><?php esc_html_e( 'Register on the map', 'learnyboxmap' ); ?></h2>
 
 <form>
@@ -16,17 +33,8 @@
 		<div class="required">
 			<label for="category"><?php esc_html_e( 'Your category', 'learnyboxmap' ); ?></label>
 			<?php
-			wp_dropdown_categories(
-				array(
-					'taxonomy'         => \LearnyboxMap\Entity\Taxonomy\Category::name(),
-					'name'             => 'category',
-					'hide_empty'       => false,
-					'hierarchical'     => true,
-					'required'         => true,
-					'show_option_none' => __( 'None', 'default' ),
-					'selected'         => 0, // @todo Select the member category if he's already registered
-				)
-			);
+				// @todo Select the member category if he's already registered.
+				\LearnyboxMap\Template::render( 'widget/dropdown_categories', array( 'selected' => 0 ) );
 			?>
 			<span class="help"><?php echo wp_kses_data( __( 'members_map.field_category_help', 'learnyboxmap' ) ); ?></span>
 		</div>

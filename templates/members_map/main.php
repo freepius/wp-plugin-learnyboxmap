@@ -7,6 +7,13 @@
  * @subpackage templates
  * @author     freepius
  * @see        \LearnyboxMap\Controller\MembersMap class
+ *
+ * @global array         $vars                      All the below/template variables
+ * @global string|null   $email                     Email of current member
+ * @global \Wp_Post|null $member                    Current member
+ * @global bool          $is_registration_complete  Has the current member completed his registration on Members Map?
+ * @global string        $consent_text              The consent text for registration.
+ * @global \WP_Term[]    $categories                The available member categories.
  */
 
 \LearnyboxMap\Asset::enqueue_css_js( 'members-map' );
