@@ -19,6 +19,9 @@ class Main {
 		// Load the Custom Post Types.
 		add_action( 'init', array( $this, 'load_custom_post_types' ) );
 
+		// Load the Custom Taxonomies.
+		add_action( 'init', array( $this, 'load_custom_taxonomies' ) );
+
 		// Admin-specific hooks.
 		new Admin();
 
@@ -32,5 +35,9 @@ class Main {
 
 	public static function load_custom_post_types(): void {
 		new Entity\PostType\Member();
+	}
+
+	public static function load_custom_taxonomies(): void {
+		new Entity\Taxonomy\Category();
 	}
 }

@@ -16,6 +16,9 @@ class Admin {
 		// Add the plugin admin menu for administrators only.
 		add_action( 'admin_menu', array( $this, 'menu_add' ) );
 
+		// Add the missing menu highlight for Category custom taxonomy.
+		add_filter( 'parent_file', array( $this, 'menu_highlight' ) );
+
 		// Init hooks for settings adminstration.
 		new Settings();
 	}
@@ -27,9 +30,26 @@ class Admin {
 			'LearnyBox Map',
 			'administrator',
 			self::MENU,
-			array( $this, 'members_page' ),
+			null,
 			Asset::img( 'learnybox-icon-20x20.png' ),
 			26 // Just after the Comments menu entry (order === 25).
 		);
+
+		// Submenu to manage the Category custom taxonomy.
+		add_submenu_page(
+			self::MENU,
+			null,
+			__( 'Categories', 'default' ),
+			'administrator',
+			sprintf( 'edit-tags.php?taxonomy=%s', Entity\Taxonomy\Category::name() )
+		);
+	}
+
+	public function menu_highlight( string $parent_file ): string {
+		global $current_screen;
+
+		return Entity\Taxonomy\Category::name() === $current_screen->taxonomy
+			? self::MENU
+			: $parent_file;
 	}
 }
