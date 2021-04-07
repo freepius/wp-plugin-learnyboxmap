@@ -18,6 +18,8 @@ form {
 		padding: 1em;
 		display: flex;
 		flex-wrap: wrap;
+		align-items: center;
+		gap: 1em;
 
 		&:nth-child(odd) {
 			background-color: #efefef;
@@ -37,30 +39,55 @@ form {
 		}
 	}
 
-	label {
-		line-height: 50px;
+	/**
+	 * Special design for the consent field: having a title, a small checkbox and a potentially big text.
+	 */
+	> div#consent-field {
+		margin: 1em auto;
+		padding: 1em 0;
+		border-top: 3px solid #aaa;
+		border-bottom: 3px solid #aaa;
+
+		h2 {
+			flex-basis: 100%;
+			margin: 0;
+			font-size: 1.2em;
+		}
+
+		input[type="checkbox"] {
+			flex: 0;
+		}
+
+		label {
+			flex: 1;
+			line-height: unset;
+			text-align: justify;
+		}
 	}
 
-	input[type="text"], input[type="submit"] {
+	/**
+	 * Various elements of the <form>.
+	 */
+
+	input[type="text"], input[type="submit"], button {
 		height: 50px;
 	}
 
-	.help:not(:last-child) {
-		margin-bottom: 1em;
+	textarea {
+		max-width: 100%;
+		font-size: 1.2em;
 	}
 
 	#search-address {
-		flex: 0;
-		margin-left: 1em;
+		flex: 0 1;
 		border-radius: 10px;
-		border: 4px solid black;
+		border: 3px solid #aaa;
 	}
 
 	> input[type="submit"] {
-		margin-top: 1em;
 		padding: 1em;
 		font-weight: 700;
 		border-radius: 10px;
-		border: 4px solid black;
+		border: 3px solid #aaa;
 	}
 }

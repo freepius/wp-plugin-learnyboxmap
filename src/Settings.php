@@ -67,17 +67,39 @@ class Settings {
 		);
 
 		$fields = array(
-			'api_key'     => array( 'learnybox', __( 'Your LearnyBox API key', 'learnyboxmap' ), array() ),
-			'api_url'     => array( 'learnybox', __( 'Your LearnyBox URL', 'learnyboxmap' ), array() ),
+			'api_key'     => array( 'learnybox', __( 'Your LearnyBox API key', 'learnyboxmap' ) ),
+			'api_url'     => array( 'learnybox', __( 'Your LearnyBox URL', 'learnyboxmap' ) ),
 			// phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 			'training_id' => array( 'learnybox', __( 'ID of one of your LearnyBox trainings', 'learnyboxmap' ), array( 'type' => 'integer', 'min' => 0 ) ),
 		);
 
-		foreach ( $fields as $option => list($section, $title, $input_attrs) ) {
+		// Section and fields for the "Members Map" page options.
+		add_settings_section(
+			'members_map',
+			__( 'Members Map page settings', 'learnyboxmap' ),
+			array( $this, 'section_members_map' ),
+			self::PAGE,
+		);
+
+		$fields['consent_text'] = array(
+			'members_map',
+			__( 'Consent text', 'learnyboxmap' ),
+			array(
+				'type'            => 'html_editor',
+				// 'help'         => __( 'Consent text that your LearnyBox members have to accept to be registered and displayed on the Members Map', 'learnyboxmap' ),
+				'help'            => __( 'admin.settings.field_consent_text_help', 'learnyboxmap' ),
+				'default_content' => __( 'admin.settings.field_consent_text_default', 'learnyboxmap' ),
+			),
+		);
+
+		// Render all previously registered fields.
+		foreach ( $fields as $option => $attrs ) {
+			list($section, $title, $field_attrs) = $attrs + array( 2 => array() );
+
 			add_settings_field(
 				$option,
 				$title,
-				fn () => $this->input( $option, $input_attrs ),
+				fn () => $this->render_field( $option, $field_attrs ),
 				self::PAGE,
 				$section,
 				array( 'label_for' => $option )
@@ -93,6 +115,28 @@ class Settings {
 	}
 
 	/**
+	 * Print a help message for the 'members_map' section.
+	 */
+	public function section_members_map(): void {
+		echo '<p>' . esc_html__( 'admin.settings.section_members_map_help', 'learnyboxmap' ) . '</p>';
+	}
+
+	/**
+	 * Render a field for a given plugin option.
+	 *
+	 * @param string $option The plugin option for which to render the field.
+	 * @param array  $attrs  The field attributes (including its type).
+	 */
+	public function render_field( string $option, array $attrs = array() ): void {
+		// Merge some default attributes.
+		$attrs += array( 'type' => 'text' );
+
+		'html_editor' === $attrs['type']
+			? $this->html_editor( $option, $attrs )
+			: $this->input( $option, $attrs );
+	}
+
+	/**
 	 * Print a html 'input' tag for a given plugin option.
 	 *
 	 * @param string $option The plugin option for which to display the 'input' tag.
@@ -100,10 +144,7 @@ class Settings {
 	 */
 	protected function input( string $option, array $attrs = array() ): void {
 		// Merge some default attributes.
-		$attrs += array(
-			'type' => 'text',
-			'size' => 40,
-		);
+		$attrs += array( 'size' => 40 );
 
 		// Inline the attributes.
 		$inlined_attrs = '';
@@ -122,6 +163,32 @@ class Settings {
 		$allowed_input_attrs = array( 'id', 'name', 'value', 'type', 'size', 'min' );
 
 		echo wp_kses( $input, array( 'input' => array_fill_keys( $allowed_input_attrs, array() ) ) );
+	}
+	/**
+	 * Print a html editor for a given plugin option.
+	 *
+	 * @param string $option The plugin option for which to display the html editor.
+	 * @param array  $attrs  The editor attributes.
+	 *
+	 * @todo Probably move the 'help' message in render_field().
+	 */
+	protected function html_editor( string $option, array $attrs = array() ): void {
+		// Merge some default attributes.
+		$attrs += array(
+			'default_content' => '',
+			'textarea_name'   => Option::name( $option ),
+			'teeny'           => true,
+			'textarea_rows'   => 10,
+			'quicktags'       => false,
+			'media_buttons'   => false,
+			'wpautop'         => false,
+		);
+
+		if ( isset( $attrs['help'] ) ) {
+			echo esc_html( $attrs['help'] );
+		}
+
+		wp_editor( Option::get( $option ) ?: $attrs['default_content'], $option, $attrs );
 	}
 
 	/**

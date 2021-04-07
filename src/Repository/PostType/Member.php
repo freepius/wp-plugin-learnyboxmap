@@ -25,6 +25,7 @@ use LearnyboxMap\Entity\PostType\Member as MemberPostType;
  * @author     freepius
  *
  * @fixme STRONG! Collision between 2 post names/slugs is too easy. Search $email in metadata? (not very efficient...)
+ * @fixme STRONG! Solution: Hash the email.
  */
 class Member {
 	/**

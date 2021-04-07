@@ -41,5 +41,12 @@
 		<textarea id="description" name="description" rows="20" cols="100"><?php echo esc_textarea( $member->post_content ); ?></textarea>
 	</div>
 
+	<!-- Consent text and checkbox that member has to accept to validate its registration. -->
+	<div id="consent-field" class="required">
+		<h2><?php esc_html_e( 'Your consent', 'learnyboxmap' ); ?></h2>
+		<input id="consent" name="consent" type="checkbox" required>
+		<label for="consent"><?php echo wp_kses_data( $consent_text ); ?></label>
+	</div>
+
 	<input type="submit" value="<?php esc_html_e( 'Validate', 'learnyboxmap' ); ?>"/>
 </form>

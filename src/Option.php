@@ -17,7 +17,7 @@ class Option {
 	public const NAME = 'learnyboxmap_options';
 
 	// List of all the available options.
-	protected const AVAILABLE = array( 'api_key', 'api_url', 'training_id' );
+	protected const AVAILABLE = array( 'api_key', 'api_url', 'training_id', 'consent_text' );
 
 	/**
 	 * Check if a given option is available for this plugin. If not, throw an exception.

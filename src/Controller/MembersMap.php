@@ -47,6 +47,7 @@ class MembersMap {
 		$v->email                    = $wp->query_vars['member'] ?? null;
 		$v->member                   = $v->email ? $repo->get_by_email( $v->email ) : null;
 		$v->is_registration_complete = 'publish' === get_post_status( $v->member );
+		$v->consent_text             = \LearnyboxMap\Option::get( 'consent_text' );
 
 		\LearnyboxMap\Template::render( 'members_map/main', $v );
 		exit;

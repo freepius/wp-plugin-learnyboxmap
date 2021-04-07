@@ -30,10 +30,22 @@
 		echo esc_html( sprintf( __( 'No member found with email address: %s', 'learnyboxmap' ), $email ) );
 	} elseif ( $member && false === $is_registration_complete ) {
 		// Case of a member whose registration on the LearnyBox Map is NOT complete yet.
-		\LearnyboxMap\Template::render( 'members_map/member_register', array( 'member' => $member ) );
+		\LearnyboxMap\Template::render(
+			'members_map/member_register',
+			array(
+				'member'       => $member,
+				'consent_text' => $consent_text,
+			)
+		);
 	} elseif ( $member ) {
 		// Case of a member whose registration on the LearnyBox Map is complete.
-		\LearnyboxMap\Template::render( 'members_map/member_manage', array( 'member' => $member ) );
+		\LearnyboxMap\Template::render(
+			'members_map/member_manage',
+			array(
+				'member'       => $member,
+				'consent_text' => $consent_text,
+			)
+		);
 	}
 
 	wp_print_footer_scripts();

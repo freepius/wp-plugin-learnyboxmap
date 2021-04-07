@@ -64,6 +64,7 @@
         <exclude name="Squiz.Commenting.VariableComment.Missing"/>
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
 	</rule>
 
 	<!--
