@@ -28,7 +28,7 @@ class Admin {
 			'administrator',
 			self::MENU,
 			array( $this, 'members_page' ),
-			LEARNYBOXMAP_URL . 'assets/images/learnybox-icon-20x20.png',
+			Asset::img( 'learnybox-icon-20x20.png' ),
 			26 // Just after the Comments menu entry (order === 25).
 		);
 	}

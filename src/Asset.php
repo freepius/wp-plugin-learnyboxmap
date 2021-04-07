@@ -11,9 +11,13 @@ namespace LearnyboxMap;
  */
 class Asset {
 	protected const URL    = LEARNYBOXMAP_URL . 'assets/';
+	protected const IMAGES = self::URL . 'images/';
 	protected const CSS    = self::URL . 'css/';
 	protected const JS     = self::URL . 'js/';
-	protected const IMAGES = self::URL . 'images/';
+
+	public static function img( string $file ): string {
+		return self::IMAGES . $file . '?ver=' . LEARNYBOXMAP_VERSION;
+	}
 
 	public static function enqueue_css( string $file ): void {
 		wp_enqueue_style( $file, self::CSS . $file . '.css', array(), LEARNYBOXMAP_VERSION );

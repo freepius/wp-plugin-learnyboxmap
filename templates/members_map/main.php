@@ -9,6 +9,7 @@
  * @see        \LearnyboxMap\Controller\MembersMap class
  */
 
+\LearnyboxMap\Asset::enqueue_css_js( 'members-map' );
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>

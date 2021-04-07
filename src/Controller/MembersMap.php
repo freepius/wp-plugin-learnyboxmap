@@ -39,7 +39,6 @@ class MembersMap {
 		if ( ! isset( $wp->query_vars['learnyboxmap_page_membersmap'] ) ) {
 			return;
 		}
-		\LearnyboxMap\Asset::enqueue_css_js( 'members-map' );
 
 		$repo = new \LearnyboxMap\Repository\PostType\Member();
 
