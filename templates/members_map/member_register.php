@@ -11,6 +11,27 @@
 		<span class="help"><?php echo wp_kses_data( __( 'members_map.field_name_help', 'learnyboxmap' ) ); ?></span>
 	</div>
 
+	<!-- Member category: required -->
+	<?php if ( $categories ) : ?>
+		<div class="required">
+			<label for="category"><?php esc_html_e( 'Your category', 'learnyboxmap' ); ?></label>
+			<?php
+			wp_dropdown_categories(
+				array(
+					'taxonomy'         => \LearnyboxMap\Entity\Taxonomy\Category::name(),
+					'name'             => 'category',
+					'hide_empty'       => false,
+					'hierarchical'     => true,
+					'required'         => true,
+					'show_option_none' => __( 'None', 'default' ),
+					'selected'         => 0, // @todo Select the member category if he's already registered
+				)
+			);
+			?>
+			<span class="help"><?php echo wp_kses_data( __( 'members_map.field_category_help', 'learnyboxmap' ) ); ?></span>
+		</div>
+	<?php endif; ?>
+
 	<!-- Member geo. coordinates: required but readonly -->
 	<div class="required">
 		<label for="geo_coordinates"><?php esc_html_e( 'Geographical coordinates', 'learnyboxmap' ); ?></label>

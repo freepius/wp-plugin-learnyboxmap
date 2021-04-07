@@ -35,6 +35,7 @@
 			array(
 				'member'       => $member,
 				'consent_text' => $consent_text,
+				'categories'   => $categories,
 			)
 		);
 	} elseif ( $member ) {
@@ -44,6 +45,7 @@
 			array(
 				'member'       => $member,
 				'consent_text' => $consent_text,
+				'categories'   => $categories,
 			)
 		);
 	}

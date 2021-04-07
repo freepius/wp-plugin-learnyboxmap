@@ -47,6 +47,7 @@ form {
 		padding: 1em 0;
 		border-top: 3px solid #aaa;
 		border-bottom: 3px solid #aaa;
+		background-color: transparent;
 
 		h2 {
 			flex-basis: 100%;
@@ -69,8 +70,15 @@ form {
 	 * Various elements of the <form>.
 	 */
 
-	input[type="text"], input[type="submit"], button {
+	input[type="text"], input[type="submit"], button, select {
 		height: 50px;
+	}
+
+	select {
+		flex-grow: 0;
+		padding: 0 0.5em;
+		background-color: white;
+		border: 1px solid #aaa;
 	}
 
 	textarea {

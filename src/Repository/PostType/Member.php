@@ -15,9 +15,9 @@ use LearnyboxMap\Entity\PostType\Member as MemberPostType;
  * For performance purposes, LearnyBox Member data are stored in a WordPress custom post as follows:
  * - post `title` receives:     name to display on the map (commonly the first and last name, or nickname)
  * - post `name/slug` receives: slugify email
- * - post `parent ID` receives: *user_id*
+ * - post `parent ID` receives: LearnyBox *user_id* (misuse of parent field, but nice to quickly retrieve a member)
  * - post `content` receives:   text describing the member, his activities, contact details, etc.
- * - post `metadata` receive:   raw email and full address
+ * - post `metadata` receive:   raw email, full address and geo coordinates.
  *
  * @since      1.0.0
  * @package    LearnyboxMap
