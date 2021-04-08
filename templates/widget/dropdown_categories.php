@@ -12,6 +12,7 @@
  * @global int      $selected   ID of the term to select.
  *
  * @todo Add somewhere a *title* containing the category description (note: not possible inside the *option* tag).
+ * @todo Solution: Implement a Walker class to generate the <option> tags.
  */
 
 wp_dropdown_categories(

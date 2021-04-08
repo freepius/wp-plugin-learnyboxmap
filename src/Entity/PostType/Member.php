@@ -23,6 +23,17 @@ class Member {
 	}
 
 	/**
+	 * Determine if a given post is of this custom type.
+	 *
+	 * Note: this function do a SQL transaction or a WordPress cache call.
+	 *
+	 * @param int|\Wp_Post $post Post ID or post object (must not be a PHP falsey value).
+	 */
+	public static function is( $post ): bool {
+		return $post && static::name() === get_post_type( $post );
+	}
+
+	/**
 	 * Get the CPT slug (used to rewrite the CPT URLs).
 	 */
 	protected function slug(): string {

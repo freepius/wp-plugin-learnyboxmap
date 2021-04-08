@@ -17,7 +17,7 @@
 ?>
 <h2><?php esc_html_e( 'Register on the map', 'learnyboxmap' ); ?></h2>
 
-<form>
+<form action="?learnyboxmap_page_membersmap=1" method="post">
 	<input type="hidden" name="ID" value="<?php echo esc_attr( $member->ID ); ?>"/>
 
 	<!-- Member name: required -->
