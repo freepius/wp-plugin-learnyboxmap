@@ -41,6 +41,8 @@ class Category {
 	/**
 	 * Delete all the taxonomy terms.
 	 * This function should be called during plugin uninstallation.
+	 *
+	 * Note: could be inefficient on a large amount of terms.
 	 */
 	public static function delete_terms(): void {
 		// We cannot use get_terms() because the taxonomy might not be registered when this function is called.
@@ -51,7 +53,7 @@ class Category {
 			)
 		);
 
-		foreach ( $query->terms as $term ) {
+		foreach ( $query->get_terms() as $term ) {
 			wp_delete_term( $term->term_id, static::name() );
 		}
 	}

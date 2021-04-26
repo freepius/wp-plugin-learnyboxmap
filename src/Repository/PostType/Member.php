@@ -5,6 +5,8 @@ namespace LearnyboxMap\Repository\PostType;
 use LearnyboxMap\Option;
 use LearnyboxMap\Api\LearnyBox as LearnyBoxAPI;
 use LearnyboxMap\Entity\PostType\Member as MemberPostType;
+use LearnyboxMap\Transformer\PostType\Member as MemberTransformer;
+use WP_Post;
 
 /**
  * Functionalities to manage the LearnyBox members, ie:
@@ -28,6 +30,22 @@ use LearnyboxMap\Entity\PostType\Member as MemberPostType;
  * @fixme STRONG! Solution: Hash the email.
  */
 class Member {
+	/**
+	 * Update a LearnyBox Member from *HTML Form* data.
+	 *
+	 * @param \WP_Post  $member     Member post to update.
+	 * @param \stdClass $form_data  *HTML Form* data.
+	 * @return WP_Post|null The updated Member post, or null in case of error.
+	 */
+	public function update_by_form_data( \WP_Post $member, \stdClass $form_data ): ?\WP_Post {
+		$post_id = wp_update_post(
+			array( 'ID' => $member->ID )
+			+ sanitize_post( MemberTransformer::form_to_wp( $form_data ), 'db' )
+		);
+
+		return get_post( $post_id );
+	}
+
 	/**
 	 * Try to get a LearnyBox Member by its email address.
 	 *
@@ -96,7 +114,7 @@ class Member {
 		foreach ( $members as $partial_member ) {
 			// LearnyBox member found!
 			if ( $email === $partial_member->user->email ) {
-				$member = $this->transform_from_api_to_wp(
+				$member = MemberTransformer::api_to_wp(
 					$api->get_one_member_by_id( $partial_member->user->user_id )
 				);
 
@@ -137,34 +155,9 @@ class Member {
 		}
 
 		$post_id = wp_update_post(
-			sanitize_post( $member + array( 'ID' => $post->ID ), 'db' )
+			sanitize_post( array( 'ID' => $post->ID ) + $member, 'db' )
 		);
 
 		return get_post( $post_id );
-	}
-
-	/**
-	 * Transform member data from LearnyBox API style to WordPress Post one.
-	 *
-	 * @param \stdClass $api_data Member data sent by LearnyBox API and json-decoded as object.
-	 * @return array Member data transformed as an array having a WordPress Post style.
-	 */
-	protected function transform_from_api_to_wp( \stdClass $api_data ): array {
-		return array(
-			'post_type'    => MemberPostType::name(),
-			'post_title'   => $api_data->_string,
-			'post_name'    => $api_data->email,
-			'post_parent'  => (int) $api_data->user_id,
-			'meta_input'   => array(
-				'email'       => $api_data->email,
-				'geo_address' => sprintf(
-					'%s, %s %s, %s',
-					$api_data->user_configs->adresse->value,
-					$api_data->user_configs->code_postal->value,
-					$api_data->user_configs->ville->value,
-					$api_data->user_configs->pays->value,
-				),
-			),
-		);
 	}
 }

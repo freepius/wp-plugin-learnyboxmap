@@ -95,7 +95,7 @@ class LearnyBox {
 
 			// Store API response in the cache (for one day max).
 			$cached_responses[] = $response;
-			set_transient( $transient_id, $cached_responses, 60 * 60 * 24 );
+			set_transient( $transient_id, $cached_responses, DAY_IN_SECONDS );
 
 			yield from $response->data;
 		}

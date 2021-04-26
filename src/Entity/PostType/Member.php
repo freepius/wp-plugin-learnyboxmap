@@ -74,6 +74,8 @@ class Member {
 	/**
 	 * Delete all the posts of the custom type.
 	 * This function should be called during plugin uninstallation.
+	 *
+	 * Note: could be inefficient on a large amount of posts.
 	 */
 	public static function delete_posts(): void {
 		// We cannot use get_posts() because the type might not be registered when this function is called.
@@ -84,7 +86,7 @@ class Member {
 			)
 		);
 
-		foreach ( $query->posts as $post ) {
+		foreach ( $query->get_posts() as $post ) {
 			wp_delete_post( $post->ID, true );
 		}
 	}

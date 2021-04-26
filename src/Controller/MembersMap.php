@@ -7,6 +7,7 @@ use \LearnyboxMap\Template;
 use \LearnyboxMap\Entity\PostType\Member as MemberPostType;
 use \LearnyboxMap\Entity\Taxonomy\Category as CategoryTaxonomy;
 use \LearnyboxMap\Repository\PostType\Member as MemberRepository;
+use \LearnyboxMap\Transformer\PostType\Member as MemberTransformer;
 
 /**
  * Functionalities and hooks to manage the "Members Map" page.
@@ -25,11 +26,13 @@ use \LearnyboxMap\Repository\PostType\Member as MemberRepository;
 class MembersMap {
 	protected const NONCE_KEY = 'learnyboxmap_members_map_nonce';
 
-	protected MemberRepository $member_repo;
-
 	public function __construct() {
 		add_filter( 'query_vars', array( $this, 'allow_query_vars' ) );
 		add_action( 'parse_request', array( $this, 'load_page_if' ) );
+	}
+
+	protected function exit_with_error(): void {
+		wp_die( esc_html__( 'members_map.error', 'learnyboxmap' ) );
 	}
 
 	/**
@@ -56,33 +59,26 @@ class MembersMap {
 	 * @todo check http referer is the good one
 	 */
 	protected function do_checks_before_load_page( \WP &$wp ): void {
-		$exit_with_error = fn () => wp_die( esc_html__( 'members_map.error', 'learnyboxmap' ) );
-
-		$member = $wp->query_vars['member'] ?? null;
-
-		if ( empty( $_POST ) ) {
-			// In a NOT <form> context, *member* query var must be a valid email address.
-			$member = is_email( $member ) ? $this->member_repo->get_by_email( $member ) : $exit_with_error();
-		} else {
+		if ( ! empty( $_POST ) ) {
 			// The <form> must be secure and fresh (ie nonce =< 12 hours), and correct.
 			1 === wp_verify_nonce( sanitize_key( $_POST['nonce'] ?? '' ), self::NONCE_KEY )
+			&& isset( $_POST['member'] )
 			&& isset( $_POST['name'] )
 			&& isset( $_POST['geo_coordinates'] )
 			&& isset( $_POST['address'] )
 			&& isset( $_POST['description'] )
-			|| $exit_with_error();
+			|| $this->exit_with_error();
 		}
-
-		// *member* query var (ID or email) must match with an existing LearnyBox member.
-		MemberPostType::is( $member ) || $exit_with_error();
 	}
 
 	/**
 	 * Load the "Members Map" page only if all following conditions are true:
 	 * 1. *learnyboxmap_page_membersmap* query var exists
-	 * 2. *member* query var exists
-	 * 3. @todo: http referer is the good one
-	 * 4. *member* is either an ID or a valid email address, both matching with an existing LearnyBox member.
+	 * 2. @todo: http referer is the good one
+	 * 3. if a form is submitted, it must be valid (ie, with the expected "shape")
+	 * 4. *member* query var exists
+	 * 5. *member* is a valid email address
+	 * 6. *member* matches with an existing LearnyBox member.
 	 *
 	 * If first condition is false: continue the normal WordPress process (ie, the page has not been requested).
 	 * If one of other conditions is false: exit with error (ie, the page has been requested, but with potentially bad intentions).
@@ -90,26 +86,55 @@ class MembersMap {
 	 * @param \WP $wp Current WordPress environment instance (passed by reference).
 	 */
 	public function load_page_if( \WP &$wp ): void {
+		// Condition 1.
 		if ( ! isset( $wp->query_vars['learnyboxmap_page_membersmap'] ) ) {
 			return;
 		}
 
-		$this->member_repo = new MemberRepository();
-
+		// Conditions 2. and 3.
 		$this->do_checks_before_load_page( $wp );
+
+		// Condition 4.
+		$email = $wp->query_vars['member'] ?? null;
+
+		// Condition 5.
+		if ( false === is_email( $email ) ) {
+			$this->exit_with_error();
+		}
+
+		// Condition 6.
+		$repo   = new MemberRepository();
+		$member = $repo->get_by_email( $email );
+
+		if ( false === MemberPostType::is( $member ) ) {
+			$this->exit_with_error();
+		}
 
 		// Variables/data sent to template.
 		$v                           = new \stdClass();
-		$v->email                    = $wp->query_vars['member'] ?? null;
-		$v->member                   = $v->email ? $this->member_repo->get_by_email( $v->email ) : null;
-		$v->is_registration_complete = 'publish' === get_post_status( $v->member );
+		$v->is_registration_complete = 'publish' === get_post_status( $member );
 		$v->consent_text             = Option::get( 'consent_text' );
-		$v->categories               = get_terms(
+
+		$v->categories = get_terms(
 			array(
 				'taxonomy'   => CategoryTaxonomy::name(),
 				'hide_empty' => false,
 			)
 		);
+
+		// Prepare the Form data:
+		// - either from Member post (case of first request)
+		// - either from $_POST (case of a submitted form).
+		$v->form = empty( $_POST ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			? MemberTransformer::wp_to_form( $member )
+			: MemberTransformer::post_to_form( $v->categories );
+
+		$v->form->nonce = self::NONCE_KEY;
+
+		// If Member is not completely registered and form has no error => update and publish the Member.
+		if ( false === $v->is_registration_complete && array() === $v->form->errors ) {
+			$repo->update_by_form_data( $member, $v->form );
+		}
 
 		Template::render( 'members_map/main', $v );
 		exit;

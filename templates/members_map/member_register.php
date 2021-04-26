@@ -9,65 +9,66 @@
  * @see        *members_map/main* template
  *
  * @global array         $vars          All the below/template variables
- * @global \Wp_Post|null $member        Current member
+ * @global \stdClass     $form          Form data of the current member
  * @global string        $consent_text  The consent text for registration.
  * @global \WP_Term[]    $categories    The available member categories.
  */
+
+use \LearnyboxMap\Template as Tpl;
 
 ?>
 <h2><?php esc_html_e( 'Register on the map', 'learnyboxmap' ); ?></h2>
 
 <form action="?learnyboxmap_page_membersmap=1" method="post">
-	<input type="hidden" name="ID" value="<?php echo esc_attr( $member->ID ); ?>"/>
+	<?php wp_nonce_field( $form->nonce, 'nonce', false ); ?>
+	<input type="hidden" name="member" value="<?php echo esc_attr( $form->member ); ?>">
 
 	<!-- Member name: required -->
-	<div class="required">
-		<label for="name"><?php esc_html_e( 'Name to display', 'learnyboxmap' ); ?></label>
-		<input id="name" name="name" type="text" required
-			value="<?php echo esc_attr( $member->post_title ); ?>">
-		<span class="help"><?php echo wp_kses_data( __( 'members_map.field_name_help', 'learnyboxmap' ) ); ?></span>
-	</div>
+	<?php //phpcs:disable
+	Tpl::field( $form, 'name', 'text', array(
+		'label'    => __( 'Name to display', 'learnyboxmap' ),
+		'help'     => __( 'members_map.field_name_help', 'learnyboxmap' ),
+		'required' => true,
+	) );
+	// phpcs:enable ?>
 
 	<!-- Member category: required -->
 	<?php if ( $categories ) : ?>
 		<div class="required">
-			<label for="category"><?php esc_html_e( 'Your category', 'learnyboxmap' ); ?></label>
 			<?php
-				// @todo Select the member category if he's already registered.
-				\LearnyboxMap\Template::render( 'widget/dropdown_categories', array( 'selected' => 0 ) );
+				Tpl::label_e( 'category', __( 'Your category', 'learnyboxmap' ) )
+					::render( 'widget/dropdown_categories', array( 'selected' => $form->category ) )
+					::help_e( __( 'members_map.field_category_help', 'learnyboxmap' ) )
+					::error_e( $form->errors, 'category' );
 			?>
-			<span class="help"><?php echo wp_kses_data( __( 'members_map.field_category_help', 'learnyboxmap' ) ); ?></span>
 		</div>
 	<?php endif; ?>
 
 	<!-- Member geo. coordinates: required but readonly -->
-	<div class="required">
-		<label for="geo_coordinates"><?php esc_html_e( 'Geographical coordinates', 'learnyboxmap' ); ?></label>
-		<input id="geo_coordinates" name="geo_coordinates" type="text" required readonly
-		<?php
-			echo $member->geo_latitude && $member->geo_longitude
-				? 'value="' . esc_attr( $member->geo_latitude . ', ' . $member->geo_longitude ) . '"'
-				: '';
-		?>
-		>
-		<span class="help"><?php echo wp_kses_data( __( 'members_map.field_geo_coordinates_help', 'learnyboxmap' ) ); ?></span>
-	</div>
+	<?php //phpcs:disable
+	$form->geo_coordinates = '0, 0';
+	Tpl::field( $form, 'geo_coordinates', 'text', array(
+		'label'    => __( 'Geographical coordinates', 'learnyboxmap' ),
+		'help'     => __( 'members_map.field_geo_coordinates_help', 'learnyboxmap' ),
+		'required' => true, 'readonly' => true,
+	) );
+	// phpcs:enable ?>
 
 	<!-- Member address: only used to help member to find a place on the map, will be deleted after member registration -->
 	<div>
-		<label for="address"><?php esc_html_e( 'Find a place / address on the map', 'learnyboxmap' ); ?></label>
-		<input id="address" name="address" type="text" value="<?php echo esc_attr( $member->geo_address ); ?>">
+		<?php Tpl::label_e( 'address', __( 'Find a place / address on the map', 'learnyboxmap' ) ); ?>
+		<input id="address" name="address" type="text" value="<?php echo esc_attr( $form->address ); ?>">
 		<button id="search-address" title="<?php esc_attr_e( 'Search on the map', 'learnyboxmap' ); ?>">
-			<img src=<?php echo esc_attr( \LearnyboxMap\Asset::img( 'icon-search-map-30x30.png' ) ); ?> alt="">
+			<img src="<?php echo esc_attr( \LearnyboxMap\Asset::img( 'icon-search-map-30x30.png' ) ); ?>" alt="">
 		</button>
-		<span class="help"><?php echo wp_kses_data( __( 'members_map.field_address_help', 'learnyboxmap' ) ); ?></span>
+		<?php Tpl::help_e( __( 'members_map.field_address_help', 'learnyboxmap' ) )::error_e( $form->errors, 'address' ); ?>
 	</div>
 
 	<!-- Member description text -->
 	<div class="block">
 		<label for="description"><?php esc_html_e( 'What do you have to say to others?', 'learnyboxmap' ); ?></label>
 		<div class="help"><?php echo wp_kses_post( __( 'members_map.field_description_help', 'learnyboxmap' ) ); ?></div>
-		<textarea id="description" name="description" rows="20" cols="100"><?php echo esc_textarea( $member->post_content ); ?></textarea>
+		<textarea id="description" name="description" rows="20" cols="100"><?php echo esc_textarea( $form->description ); ?></textarea>
 	</div>
 
 	<!-- Consent text and checkbox that member has to accept to validate its registration. -->
