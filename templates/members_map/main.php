@@ -29,6 +29,9 @@
 		?>
 	</head>
 	<body>
+
+	<main id="map"></main>
+
 	<?php
 	if ( false === $is_registration_complete ) {
 		// Case of a member whose registration on the LearnyBox Map is NOT complete yet.
