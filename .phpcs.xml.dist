@@ -58,9 +58,10 @@
 
 	<rule ref="WordPress">
     	<exclude-pattern>bin/change-plugin-version.php</exclude-pattern>
-
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
         <exclude name="Squiz.Commenting.FileComment.Missing"/>
         <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
         <exclude name="Squiz.Commenting.VariableComment.Missing"/>
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>

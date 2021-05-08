@@ -11,6 +11,10 @@ $new = '1.0.0';
 $dir = \dirname(__FILE__) . '/../';
 
 $filesPatterns = [
+    'package.json' => [
+        "\"version\": \"$old\"" => "\"version\": \"$new\"",
+    ],
+
     'learnyboxmap.php' => [
         "Version:           $old" => "Version:           $new",
         "define( 'LEARNYBOXMAP_VERSION', '$old' );" => "define( 'LEARNYBOXMAP_VERSION', '$new' );",

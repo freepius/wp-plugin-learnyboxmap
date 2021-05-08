@@ -1,8 +1,19 @@
 html {
-	line-height: 1.5rem;
+	line-height: 24px;
 	font-family:
-		system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans",
-		sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+		system-ui,
+		-apple-system,
+		"Segoe UI",
+		Roboto,
+		"Helvetica Neue",
+		Arial,
+		"Noto Sans",
+		"Liberation Sans",
+		sans-serif,
+		"Apple Color Emoji",
+		"Segoe UI Emoji",
+		"Segoe UI Symbol",
+		"Noto Color Emoji";
 }
 
 body {
@@ -11,8 +22,10 @@ body {
 }
 
 form {
+
 	/**
-	 * Direct <div> in <form> contains a field (including its label, help and error messages, controls, etc.)
+	 * Direct <div> in <form> contains a field
+	 * (including its label, help and error messages, controls, etc.)
 	 */
 	> div {
 		padding: 1em;
@@ -25,6 +38,10 @@ form {
 			background-color: #efefef;
 		}
 
+		> * {
+			flex-grow: 1;
+		}
+
 		&.block > *,
 		> .help {
 			flex: 1 0 100% !important;
@@ -33,14 +50,11 @@ form {
 		> label {
 			flex: 0 0 33.33%;
 		}
-
-		> * {
-			flex-grow: 1;
-		}
 	}
 
 	/**
-	 * Special design for the consent field: having a title, a small checkbox and a potentially big text.
+	 * Special design for the consent field:
+	 * having a title, a small checkbox and a potentially big text.
 	 */
 	> div#consent-field {
 		margin: 1em auto;
@@ -70,14 +84,17 @@ form {
 	 * Various elements of the <form>.
 	 */
 
-	input[type="text"], input[type="submit"], button, select {
+	input[type="text"],
+	input[type="submit"],
+	button,
+	select {
 		height: 50px;
 	}
 
 	select {
 		flex-grow: 0;
 		padding: 0 0.5em;
-		background-color: white;
+		background-color: #fff;
 		border: 1px solid #aaa;
 	}
 

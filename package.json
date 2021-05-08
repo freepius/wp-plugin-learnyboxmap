@@ -1,0 +1,42 @@
+{
+  "name": "learnyboxmap",
+  "version": "1.0.0",
+  "description": "LearnyboxMap allows your LearnyBox members to be displayed on an interactive map and see other members there.",
+  "author": "freepius",
+  "license": "GPL-3.0",
+  "keywords": [
+    "WordPress",
+    "Plugin",
+    "Mapping"
+  ],
+  "homepage": "https://github.com/freepius/wp-plugin-learnyboxmap",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freepius/wp-plugin-learnyboxmap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freepius/wp-plugin-learnyboxmap/issues"
+  },
+  "dependencies": {
+    "leaflet": "^1.7.1",
+    "leaflet-providers": "^1.12.0"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^15.0.1"
+  },
+  "scripts": {
+    "build": "wp-scripts build assets/js/*.js --output-path=assets/build",
+    "start": "wp-scripts start assets/js/*.js --output-path=assets/build",
+    "check-engines": "wp-scripts check-engines",
+    "check-licenses": "wp-scripts check-licenses",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "lint:md:docs": "wp-scripts lint-md-docs",
+    "lint:md:js": "wp-scripts lint-md-js",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "packages-update": "wp-scripts packages-update",
+    "test:e2e": "wp-scripts test-e2e",
+    "test:unit": "wp-scripts test-unit-js"
+  }
+}
