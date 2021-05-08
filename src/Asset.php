@@ -14,7 +14,7 @@ class Asset {
 	protected const PATH       = LEARNYBOXMAP_PATH . 'assets/';
 	protected const IMAGES     = self::URL . 'images/';
 	protected const BUILD_PATH = self::PATH . 'build/';
-	protected const BUILD_URL  = self::URL . 'build/';
+	public const BUILD_URL     = self::URL . 'build/';
 
 	public static function img( string $file ): string {
 		return self::IMAGES . $file . '?ver=' . LEARNYBOXMAP_VERSION;

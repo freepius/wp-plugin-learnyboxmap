@@ -1,4 +1,6 @@
 <?php
+namespace LearnyboxMap;
+
 /**
  * Template of the public, stand-alone "Members Map" page.
  *
@@ -15,7 +17,7 @@
  * @global \WP_Term[]    $categories                The available member categories.
  */
 
-\LearnyboxMap\Asset::enqueue_css_js( 'members-map' );
+Asset::enqueue_css_js( 'members-map' );
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -27,6 +29,11 @@
 			wp_print_styles();
 			wp_print_head_scripts();
 		?>
+		<script>
+			const LearnyboxMapPlugin = {
+				'buildUrl': '<?php echo esc_js( Asset::BUILD_URL ); ?>',
+			};
+		</script>
 	</head>
 	<body>
 
@@ -45,7 +52,7 @@
 		);
 	} else {
 		// Case of a member whose registration on the LearnyBox Map is complete.
-		\LearnyboxMap\Template::render(
+		Template::render(
 			'members_map/member_manage',
 			array(
 				'form'         => $form,

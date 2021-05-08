@@ -11,6 +11,8 @@ module.exports = {
 	globals: {
 		window: true,
 		document: true,
+		fetch: true,
+		location: true,
 	},
 	rules: {
 		'import/no-extraneous-dependencies': [
@@ -22,5 +24,5 @@ module.exports = {
 		'import/no-unresolved': 'error',
 		'import/default': 'warn',
 		'import/named': 'warn',
-	}
+	},
 };
