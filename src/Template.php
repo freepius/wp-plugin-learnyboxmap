@@ -46,21 +46,47 @@ class Template {
 		return self::class;
 	}
 
-	public static function help( string $help_message ): string {
-		return '<span class="help">' . wp_kses_data( $help_message ) . '</span>';
+	public static function help( string $message, string $tag = 'span' ): string {
+		$message = 'div' === $tag ? wp_kses_post( $message ) : wp_kses_data( $message );
+		return "<$tag class=\"help\">$message</$tag>";
 	}
 
-	public static function help_e( string $help_message ): string {
-		echo self::help( $help_message ); // phpcs:ignore
+	public static function help_e( string $message, string $tag = 'span' ): string {
+		echo self::help( $message, $tag ); // phpcs:ignore
 		return self::class;
 	}
 
-	public static function label( string $for, string $text ): string {
-		return sprintf( '<label for="%s">%s</label>', esc_attr( $for ), esc_html( $text ) );
+	public static function label( string $for, string $text, bool $with_html = false ): string {
+		return sprintf(
+			'<label for="%s">%s</label>',
+			esc_attr( $for ),
+			$with_html ? wp_kses_data( $text ) : esc_html( $text )
+		);
 	}
 
-	public static function label_e( string $for, string $text ): string {
-		echo self::label( $for, $text ); // phpcs:ignore
+	public static function label_e( string $for, string $text, bool $with_html = false ): string {
+		echo self::label( $for, $text, $with_html ); // phpcs:ignore
+		return self::class;
+	}
+
+	public static function input( string $name, string $value, string $type = 'text', array $attrs = array() ): string {
+		$attrs += array(
+			'required' => false,
+			'readonly' => false,
+		);
+
+		return sprintf(
+			'<input id="%1$s" name="%1$s" value="%2$s" type="%3$s" %4$s %5$s>',
+			/* 1 */ esc_attr( $name ),
+			/* 2 */ esc_attr( $value ),
+			/* 3 */ esc_attr( $type ),
+			/* 4 */ $attrs['required'] ? 'required' : '',
+			/* 5 */ $attrs['readonly'] ? 'readonly' : '',
+		);
+	}
+
+	public static function input_e( string $name, string $value, string $type = 'text', array $attrs = array() ): string {
+		echo self::input( $name, $value, $type, $attrs ); // phpcs:ignore
 		return self::class;
 	}
 
@@ -68,24 +94,21 @@ class Template {
 		$attrs += array(
 			'label'    => '',
 			'help'     => '',
-			'required' => false,
-			'readonly' => false,
+			'required' => false, // @fixme: keep it here, or just in input() ?
 		);
 
 		printf(
 			'<div class="%1$s">
 				%2$s
-				<input type="text" id="%3$s" name="%3$s" value="%4$s" %1$s %5$s>
-				%6$s
-				%7$s
+				%3$s
+				%4$s
+				%5$s
 			</div>',
 			/* 1 */ $attrs['required'] ? 'required' : '',                           // phpcs:ignore
 			/* 2 */ $attrs['label'] ? self::label( $name, $attrs['label'] ) : '',   // phpcs:ignore
-			/* 3 */ esc_attr( $name ),
-			/* 4 */ esc_attr( $form->$name ?? '' ),
-			/* 5 */ $attrs['readonly'] ? 'readonly' : '',                           // phpcs:ignore
-			/* 6 */ $attrs['help'] ? self::help( $attrs['help'] ) : '',             // phpcs:ignore
-			/* 7 */ self::error( $form->errors ?? array(), $name ),                 // phpcs:ignore
+			/* 3 */ self::input( $name, $form->$name ?? '', 'text', $attrs ),       // phpcs:ignore
+			/* 4 */ $attrs['help'] ? self::help( $attrs['help'] ) : '',             // phpcs:ignore
+			/* 5 */ self::error( $form->errors ?? array(), $name ),                 // phpcs:ignore
 		);
 
 		return self::class;
