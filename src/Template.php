@@ -3,7 +3,9 @@
 namespace LearnyboxMap;
 
 /**
- * Functionalities to manage and render the plugin templates.
+ * This class:
+ * - allows to manage and render the plugin templates
+ * - offers methods to display various html elements (form elements, img, etc.)
  *
  * @since      1.0.0
  * @package    LearnyboxMap
@@ -26,12 +28,26 @@ class Template {
 	}
 
 	/**
+	 * Print the return value of Template static methods (like img_(), error_(), input_(), label_()...)
+	 * and return the class name (to allow chaining of method calls).
+	 */
+	public static function __callStatic( string $name, array $arguments ): string {
+		$name = $name . '_';
+		echo self::$name( ...$arguments ); // phpcs:ignore WordPress.Security.EscapeOutput, <= the method is supposed to escape its ouput
+		return self::class;
+	}
+
+	public static function img_( string $file ): string {
+		return sprintf( '<img src="%s" alt="">', esc_attr( Asset::img( $file ) ) );
+	}
+
+	/**
 	 * Return `$one` error from an `$errors` array.
 	 *
 	 * @param array  $errors  Keys are error identifiers ; values are error messages.
 	 * @param string $id      Id. of the error to return.
 	 */
-	public static function error( array $errors, string $id ): string {
+	public static function error_( array $errors, string $id ): string {
 		return empty( $errors[ $id ] )
 			? ''
 			: sprintf(
@@ -41,22 +57,13 @@ class Template {
 			);
 	}
 
-	public static function error_e( array $errors, string $id ): string {
-		echo self::error( $errors, $id ); // phpcs:ignore
-		return self::class;
-	}
-
-	public static function help( string $message, string $tag = 'span' ): string {
+	public static function help_( string $message, string $tag = 'span' ): string {
+		$tag     = in_array( $tag, array( 'span', 'div' ), true ) ? $tag : 'span';
 		$message = 'div' === $tag ? wp_kses_post( $message ) : wp_kses_data( $message );
 		return "<$tag class=\"help\">$message</$tag>";
 	}
 
-	public static function help_e( string $message, string $tag = 'span' ): string {
-		echo self::help( $message, $tag ); // phpcs:ignore
-		return self::class;
-	}
-
-	public static function label( string $for, string $text, bool $with_html = false ): string {
+	public static function label_( string $for, string $text, bool $with_html = false ): string {
 		return sprintf(
 			'<label for="%s">%s</label>',
 			esc_attr( $for ),
@@ -64,12 +71,7 @@ class Template {
 		);
 	}
 
-	public static function label_e( string $for, string $text, bool $with_html = false ): string {
-		echo self::label( $for, $text, $with_html ); // phpcs:ignore
-		return self::class;
-	}
-
-	public static function input( string $name, string $value, string $type = 'text', array $attrs = array() ): string {
+	public static function input_( string $name, string $value, string $type = 'text', array $attrs = array() ): string {
 		$attrs += array(
 			'required' => false,
 			'readonly' => false,
@@ -85,32 +87,38 @@ class Template {
 		);
 	}
 
-	public static function input_e( string $name, string $value, string $type = 'text', array $attrs = array() ): string {
-		echo self::input( $name, $value, $type, $attrs ); // phpcs:ignore
-		return self::class;
+	public static function button_( string $id, string $value, array $attrs = array() ) {
+		$attrs += array(
+			'title' => '',
+		);
+
+		return sprintf(
+			'<button id="%1$s" %3$s>%2$s</button>',
+			/* 1 */ esc_attr( $id ),
+			/* 2 */ wp_kses( $value, 'learnyboxmap_button' ),
+			/* 3 */ $attrs['title'] ? ( 'title="' . esc_attr( $attrs['title'] ) . '"' ) : ''
+		);
 	}
 
-	public static function field( \stdClass $form, string $name, $type = 'text', array $attrs = array() ): string {
+	public static function field_( \stdClass $form, string $name, $type = 'text', array $attrs = array() ): string {
 		$attrs += array(
 			'label'    => '',
 			'help'     => '',
 			'required' => false, // @fixme: keep it here, or just in input() ?
 		);
 
-		printf(
+		return sprintf(
 			'<div class="%1$s">
 				%2$s
 				%3$s
 				%4$s
 				%5$s
 			</div>',
-			/* 1 */ $attrs['required'] ? 'required' : '',                           // phpcs:ignore
-			/* 2 */ $attrs['label'] ? self::label( $name, $attrs['label'] ) : '',   // phpcs:ignore
-			/* 3 */ self::input( $name, $form->$name ?? '', 'text', $attrs ),       // phpcs:ignore
-			/* 4 */ $attrs['help'] ? self::help( $attrs['help'] ) : '',             // phpcs:ignore
-			/* 5 */ self::error( $form->errors ?? array(), $name ),                 // phpcs:ignore
+			/* 1 */ $attrs['required'] ? 'required' : '',
+			/* 2 */ $attrs['label'] ? self::label_( $name, $attrs['label'] ) : '',
+			/* 3 */ self::input_( $name, $form->$name ?? '', 'text', $attrs ),
+			/* 4 */ $attrs['help'] ? self::help_( $attrs['help'] ) : '',
+			/* 5 */ self::error_( $form->errors ?? array(), $name ),
 		);
-
-		return self::class;
 	}
 }

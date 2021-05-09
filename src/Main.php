@@ -27,6 +27,20 @@ class Main {
 
 		// Init hooks for the public, stand-alone "Members Map" page.
 		new Controller\MembersMap();
+
+		// Allow <img> tag for wp_kses() with 'button' context.
+		// @todo Put this in Template contructor?
+		add_filter(
+			'wp_kses_allowed_html',
+			function ( array $allowedtags, string $context ): array {
+				global $allowedposttags;
+				return 'learnyboxmap_button' === $context
+					? $allowedtags + array( 'img' => $allowedposttags['img'] )
+					: $allowedtags;
+			},
+			10,
+			2
+		);
 	}
 
 	public function load_textdomains(): void {

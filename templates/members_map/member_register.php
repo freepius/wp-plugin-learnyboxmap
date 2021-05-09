@@ -1,4 +1,8 @@
 <?php
+namespace LearnyboxMap;
+
+use \LearnyboxMap\Template as Tpl;
+
 /**
  * Render a form allowing a LearnyBox Member to register on the Members Map.
  *
@@ -13,16 +17,13 @@
  * @global string        $consent_text  The consent text for registration.
  * @global \WP_Term[]    $categories    The available member categories.
  */
-
-use \LearnyboxMap\Template as Tpl;
-
 ?>
 <h2><?php esc_html_e( 'Register on the map', 'learnyboxmap' ); ?></h2>
 
 <form action="?learnyboxmap_page_membersmap=1" method="post">
 	<?php
 		wp_nonce_field( $form->nonce, 'nonce', false );
-		Tpl::input_e( 'member', $form->member, 'hidden' );
+		Tpl::input( 'member', $form->member, 'hidden' );
 	?>
 
 	<!-- Member name: required -->
@@ -38,41 +39,41 @@ use \LearnyboxMap\Template as Tpl;
 	<?php if ( $categories ) : ?>
 		<div class="required">
 			<?php
-				Tpl::label_e( 'category', __( 'Your category', 'learnyboxmap' ) )
+				Tpl::label( 'category', __( 'Your category', 'learnyboxmap' ) )
 					::render( 'widget/dropdown_categories', array( 'selected' => $form->category ) )
-					::help_e( __( 'members_map.field_category_help', 'learnyboxmap' ) )
-					::error_e( $form->errors, 'category' );
+					::help( __( 'members_map.field_category_help', 'learnyboxmap' ) )
+					::error( $form->errors, 'category' );
 			?>
 		</div>
 	<?php endif; ?>
 
-	<!-- Member geo. coordinates: required but readonly -->
-	<?php //phpcs:disable
-	$form->geo_coordinates = '0, 0'; // @todo remove that!
-	Tpl::field( $form, 'geo_coordinates', 'text', array(
-		'label'    => __( 'Geographical coordinates', 'learnyboxmap' ),
-		'help'     => __( 'members_map.field_geo_coordinates_help', 'learnyboxmap' ),
-		'required' => true, 'readonly' => true,
-	) );
-	// phpcs:enable ?>
+	<!-- Member geo coordinates: required but readonly -->
+	<div class="required">
+	<?php
+		Tpl::label( 'geo_coordinates', __( 'Geographical coordinates', 'learnyboxmap' ) )
+			::input( 'geo_coordinates', $form->geo_coordinates, 'text', array( 'readonly' => true ) )
+			::button( 'member-marker', Tpl::img_( 'icon-member-marker-30x30.png' ), array( 'title' => __( 'See / place my marker on the map', 'learnyboxmap' ) ) )
+			::help( __( 'members_map.field_geo_coordinates_help', 'learnyboxmap' ) )
+			::error( $form->errors, 'geo_coordinates' );
+	?>
+	</div>
 
-	<!-- Member address: only used to help member to find a place on the map, will be deleted after member registration -->
+	<!-- Member address: used to help member to find his geo coordinates -->
 	<div>
-		<?php
-			Tpl::label_e( 'address', __( 'Find a place / address on the map', 'learnyboxmap' ) )
-				::input_e( 'address', $form->address );
-		?>
-		<button id="search-address" title="<?php esc_attr_e( 'Search on the map', 'learnyboxmap' ); ?>">
-			<img src="<?php echo esc_attr( \LearnyboxMap\Asset::img( 'icon-search-map-30x30.png' ) ); ?>" alt="">
-		</button>
-		<?php Tpl::help_e( __( 'members_map.field_address_help', 'learnyboxmap' ) )::error_e( $form->errors, 'address' ); ?>
+	<?php
+		Tpl::label( 'address', __( 'Find a place / address on the map', 'learnyboxmap' ) )
+			::input( 'address', $form->geo_coordinates, 'text' )
+			::button( 'search-address', Tpl::img_( 'icon-search-address-30x30.png' ), array( 'title' => __( 'Search on the map', 'learnyboxmap' ) ) )
+			::help( __( 'members_map.field_address_help', 'learnyboxmap' ) )
+			::error( $form->errors, 'address' );
+	?>
 	</div>
 
 	<!-- Member description text -->
 	<div class="block">
 		<?php
-			Tpl::label_e( 'description', __( 'What do you have to say about you?', 'learnyboxmap' ) )
-				::help_e( __( 'members_map.field_description_help', 'learnyboxmap' ), 'div' );
+			Tpl::label( 'description', __( 'What do you have to say about you?', 'learnyboxmap' ) )
+				::help( __( 'members_map.field_description_help', 'learnyboxmap' ), 'div' );
 		?>
 		<textarea id="description" name="description" rows="20" cols="100"><?php echo esc_textarea( $form->description ); ?></textarea>
 	</div>
@@ -81,8 +82,8 @@ use \LearnyboxMap\Template as Tpl;
 	<div id="consent-field" class="required">
 		<h2><?php esc_html_e( 'Your consent', 'learnyboxmap' ); ?></h2>
 		<?php
-			Tpl::input_e( 'consent', 'on', 'checkbox', array( 'required' => true ) )
-				::label_e( 'consent', $consent_text, true );
+			Tpl::input( 'consent', 'on', 'checkbox', array( 'required' => true ) )
+				::label( 'consent', $consent_text, true );
 		?>
 	</div>
 

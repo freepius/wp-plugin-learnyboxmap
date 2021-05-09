@@ -13,11 +13,12 @@ L.Icon.Default.prototype._getIconUrl = function( name ) {
 };
 
 document.addEventListener( 'DOMContentLoaded', () => {
+	const memberMarkerButton = document.getElementById( 'member-marker' );
 	const searchAddressButton = document.getElementById( 'search-address' );
 	const lbmap = new LearnyboxMap();
 
 	/**
-	 * On 'Search address' button click:
+	 * On *search-address* button click:
 	 * - get address from <input> field
 	 * - get coords from this address
 	 * - go on map and center on these coords
@@ -35,6 +36,17 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			lbmap.removeCurrentMemberMarker();
 			// @todo Display an error message
 		}
+	} );
+
+	/**
+	 * On *member-marker* button click:
+	 * - go on map and center on current member marker
+	 * - if this one does not exist yet, create one on map center
+	 */
+	memberMarkerButton.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+		lbmap.centerOnCurrentMemberMarker();
+		document.getElementById( 'geo_coordinates' ).value = lbmap.getCurrentMemberLatLng();
 	} );
 } );
 
@@ -56,8 +68,8 @@ class LearnyboxMap {
 	/**
 	 * @member {L.Map}
 	 */
-	map
-	mapOptions = {
+	#map
+	#mapOptions = {
 		center: [ 46.227638, 2.213749 ], // centered on France center
 		zoom: 5, // start on a very wide view
 		minZoom: 5,
@@ -69,13 +81,13 @@ class LearnyboxMap {
 	 *
 	 * @member {L.Marker}
 	 */
-	currentMemberMarker
+	#currentMemberMarker
 
 	/**
 	 *
 	 */
 	constructor() {
-		this.map = L.map( 'map', this.mapOptions );
+		this.#map = L.map( 'map', this.#mapOptions );
 
 		this.#addBaseLayers();
 
@@ -94,9 +106,9 @@ class LearnyboxMap {
 			baseLayers[ provider.replace( /(\w+)\.(\w+)/, '$2 ($1)' ) ] = L.tileLayer.provider( provider )
 		);
 
-		baseLayers[ 'TerrainBackground (Stamen)' ].addTo( this.map );
+		baseLayers[ 'TerrainBackground (Stamen)' ].addTo( this.#map );
 
-		L.control.layers( baseLayers ).addTo( this.map );
+		L.control.layers( baseLayers ).addTo( this.#map );
 	}
 
 	/**
@@ -133,31 +145,45 @@ class LearnyboxMap {
 	 *************************************************/
 
 	/**
+	 * @return {string} Return "latitude, longitude" of the current member marker.
+	 */
+	getCurrentMemberLatLng() {
+		const coords = this.#currentMemberMarker?.getLatLng();
+		return coords ? coords.lat + ', ' + coords.lng : '';
+	}
+
+	/**
 	 * @param {L.LatLngExpression} latlng
 	 */
 	setCurrentMemberMarker( latlng ) {
-		if ( ! this.currentMemberMarker ) {
-			this.currentMemberMarker = L.marker( latlng ).addTo( this.map );
+		if ( ! this.#currentMemberMarker ) {
+			this.#currentMemberMarker = L.marker( latlng ).addTo( this.#map );
 		}
 
-		this.currentMemberMarker.setLatLng( latlng );
+		this.#currentMemberMarker.setLatLng( latlng );
 	}
 
 	removeCurrentMemberMarker() {
-		if ( this.currentMemberMarker ) {
-			this.map.removeLayer( this.currentMemberMarker );
-			this.currentMemberMarker = undefined;
+		if ( this.#currentMemberMarker ) {
+			this.#map.removeLayer( this.#currentMemberMarker );
+			this.#currentMemberMarker = undefined;
 		}
 	}
 
+	/**
+	 * Go on map and center on current member marker.
+	 * If this one does not exist yet, create one on map center
+	 */
 	centerOnCurrentMemberMarker() {
-		if ( this.currentMemberMarker ) {
-			this.map.setView(
-				this.currentMemberMarker.getLatLng(),
-				this.mapOptions.maxZoom
-			);
-
-			location.href = '#map';
+		if ( ! this.#currentMemberMarker ) {
+			this.setCurrentMemberMarker( this.#mapOptions.center );
 		}
+
+		this.#map.setView(
+			this.#currentMemberMarker.getLatLng(),
+			this.#mapOptions.maxZoom
+		);
+
+		location.href = '#map';
 	}
 }
