@@ -26,8 +26,15 @@ class Asset {
 	}
 
 	public static function enqueue_js( string $file, array $deps = array() ): void {
+		$load_translations = (bool) ( $deps['load_translations'] ?? false );
+		unset( $deps['load_translations'] );
+
 		list($more_deps, $version, $url) = self::file_metadata( $file );
 		wp_enqueue_script( $file, "$url.js", array_merge( $deps, $more_deps ), $version, true );
+
+		if ( $load_translations ) {
+			wp_set_script_translations( $file, 'learnyboxmap' );
+		}
 	}
 
 	public static function enqueue_css_js( string $file, array $css_deps = array(), array $js_deps = array() ): void {

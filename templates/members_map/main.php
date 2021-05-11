@@ -31,7 +31,10 @@ Asset::enqueue_css_js( 'members-map' );
 		?>
 		<script>
 			const LearnyboxMapPlugin = {
-				'buildUrl': '<?php echo esc_js( Asset::BUILD_URL ); ?>',
+				buildUrl: '<?php echo esc_js( Asset::BUILD_URL ); ?>',
+				t: {
+					CurrentMemberMarkerTitle: '<?php echo esc_js( __( 'Your marker is here. Drag&drop it to change its position.', 'learnyboxmap' ) ); ?>',
+				},
 			};
 		</script>
 	</head>

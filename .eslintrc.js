@@ -13,6 +13,7 @@ module.exports = {
 		document: true,
 		fetch: true,
 		location: true,
+		Event: true,
 	},
 	rules: {
 		'import/no-extraneous-dependencies': [
