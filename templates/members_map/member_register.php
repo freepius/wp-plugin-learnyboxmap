@@ -20,7 +20,16 @@ use \LearnyboxMap\Template as Tpl;
 ?>
 <h2><?php esc_html_e( 'Register on the map', 'learnyboxmap' ); ?></h2>
 
-<form action="?learnyboxmap_page_membersmap=1" method="post">
+<?php
+if ( $form->errors ) {
+	printf(
+		'<p class="error">%s</p>',
+		esc_html__( 'There are errors in the form. Please correct them to continue. ', 'learnyboxmap' )
+	);
+}
+?>
+
+<form action="?learnyboxmap_page_membersmap=1&member=<?php echo esc_attr( $form->member ); ?>" method="post">
 	<?php
 		wp_nonce_field( $form->nonce, 'nonce', false );
 		Tpl::input( 'member', $form->member, 'hidden' );
@@ -66,7 +75,7 @@ use \LearnyboxMap\Template as Tpl;
 	<div>
 	<?php
 		Tpl::label( 'address', __( 'My place / address', 'learnyboxmap' ) )
-			::input( 'address', $form->geo_coordinates, 'text' )
+			::input( 'address', $form->address, 'text' )
 			::button(
 				'search-address',
 				Tpl::img_( 'icon-search-address-30x30.png' ),

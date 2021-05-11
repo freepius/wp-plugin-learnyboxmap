@@ -118,26 +118,26 @@ class Member {
 
 		$form->member          = $sanitize( 'member', 'email' );
 		$form->name            = $sanitize( 'name' );
-		$form->category        = intval( $_POST['category'] ?? 0 );
+		$form->category        = intval( $_POST['category'] ?? -1 );
 		$form->geo_coordinates = $sanitize( 'geo_coordinates' );
 		$form->address         = $sanitize( 'address' );
 		$form->description     = $sanitize( 'description', 'textarea_field' );
 
 		// Check name.
 		if ( empty( $form->name ) ) {
-			$errors['name'] = __( 'members_map.form_error.name.empty', 'learnyboxmap' );
+			$errors['name'] = __( 'members_map.form_error.required', 'learnyboxmap' );
 		}
 
 		// Check category.
-		if ( empty( $form->category ) ) {
-			$errors['category'] = __( 'members_map.form_error.category.empty', 'learnyboxmap' );
+		if ( -1 === $form->category ) {
+			$errors['category'] = __( 'members_map.form_error.required', 'learnyboxmap' );
 		} elseif ( array() === array_filter( $categories, fn ( \WP_Term $cat ): bool => $form->category === $cat->term_id ) ) {
 			$errors['category'] = __( 'members_map.form_error.category.invalid', 'learnyboxmap' );
 		}
 
 		// Check and sanitize geo. coordinates.
 		if ( empty( $form->geo_coordinates ) ) {
-			$errors['geo_coordinates'] = __( 'members_map.form_error.geo_coordinates.empty', 'learnyboxmap' );
+			$errors['geo_coordinates'] = __( 'members_map.form_error.required', 'learnyboxmap' );
 		} else {
 			list($latitude, $longitude) = array_map(
 				fn ( string $val ): float => floatval( trim( $val ) ),

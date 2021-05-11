@@ -9,7 +9,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	const memberMarkerButton = document.getElementById( 'member-marker' );
 
 	const unknownAddressError = document.getElementById( 'error-address' );
-	unknownAddressError.style.display = 'none';
 
 	const lbmap = new LearnyboxMap();
 
@@ -33,10 +32,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( coords ) {
 			lbmap.currentMember.set( coords );
 			lbmap.currentMember.focusOn();
-			unknownAddressError.style.display = 'true';
+			unknownAddressError.style.display = 'none';
 		} else {
 			lbmap.currentMember.delete();
-			unknownAddressError.style.display = 'unset';
+			unknownAddressError.style.display = 'block';
 		}
 	} );
 

@@ -14,6 +14,8 @@ html {
 		"Segoe UI Emoji",
 		"Segoe UI Symbol",
 		"Noto Color Emoji";
+
+	--red: rgb(235, 42, 42);
 }
 
 body {
@@ -25,6 +27,10 @@ body {
 main#map {
 	width: 100%;
 	height: 600px;
+}
+
+.error {
+	color: var(--red);
 }
 
 form {
@@ -39,6 +45,13 @@ form {
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 1em;
+
+		&.required > label::after {
+			margin-left: 5px;
+			content: "*";
+			color: var(--red);
+			font-size: 1.3em;
+		}
 
 		&:nth-child(odd) {
 			background-color: #efefef;
@@ -114,6 +127,11 @@ form {
 		flex: 0 1;
 		border-radius: 10px;
 		border: 3px solid #aaa;
+	}
+
+	// Hidden by default. Let's javascript display it.
+	#error-address {
+		display: none;
 	}
 
 	> input[type="submit"] {
