@@ -112,6 +112,7 @@ class MembersMap {
 
 		// Variables/data sent to template.
 		$v                           = new \stdClass();
+		$v->is_form_validation       = false === empty( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$v->is_registration_complete = 'publish' === get_post_status( $member );
 		$v->consent_text             = Option::get( 'consent_text' );
 
@@ -123,17 +124,26 @@ class MembersMap {
 		);
 
 		// Prepare the Form data:
-		// - either from Member post (case of first request)
+		// - either from Member post (case of a first request)
 		// - either from $_POST (case of a submitted form).
-		$v->form = empty( $_POST ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			? MemberTransformer::wp_to_form( $member )
-			: MemberTransformer::post_to_form( $v->categories );
+		$v->form = $v->is_form_validation
+			? MemberTransformer::post_to_form( $v->categories )
+			: MemberTransformer::wp_to_form( $member );
 
 		$v->form->nonce = self::NONCE_KEY;
 
-		// If Member is not completely registered and form has no error => update and publish the Member.
-		if ( false === $v->is_registration_complete && array() === $v->form->errors ) {
+		// If form has no error => update and publish the Member.
+		if ( $v->is_form_validation && array() === $v->form->errors ) {
 			$repo->update_by_form_data( $member, $v->form );
+
+			$args = array(
+				'learnyboxmap_page_membersmap' => 1,
+				'member'                       => $v->form->member,
+			);
+
+			if ( wp_safe_redirect( add_query_arg( $args, '/' ) ) ) {
+				exit;
+			}
 		}
 
 		Template::render( 'members_map/main', $v );

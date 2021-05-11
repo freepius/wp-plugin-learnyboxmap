@@ -33,6 +33,14 @@ main#map {
 	color: var(--red);
 }
 
+form > div.required > label::after,
+p#note-on-required-fields > b {
+	content: "*";
+	color: var(--red);
+	font-size: 1.3em;
+	padding: 0 5px;
+}
+
 form {
 
 	/**
@@ -45,13 +53,6 @@ form {
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 1em;
-
-		&.required > label::after {
-			margin-left: 5px;
-			content: "*";
-			color: var(--red);
-			font-size: 1.3em;
-		}
 
 		&:nth-child(odd) {
 			background-color: #efefef;

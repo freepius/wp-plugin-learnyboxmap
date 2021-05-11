@@ -23,16 +23,23 @@ export default class {
 
 	/**
 	 * @param {L.Map} map
+	 * @param {(string|L.LatLngExpression)} [latlng] Initial coordinates, if any.
 	 */
-	constructor( map ) {
+	constructor( map, latlng ) {
 		this.#map = map;
 
-		// Init a marker, but do not add it to the map yet.
 		this.#marker = L.marker( [ 0, 0 ], {
 			draggable: true,
 			autoPan: true,
 			title: LearnyboxMapPlugin.t.CurrentMemberMarkerTitle,
 		} );
+
+		if ( latlng ) {
+			if ( 'string' === typeof latlng ) {
+				latlng = latlng.split( ',' ).map( Number.parseFloat );
+			}
+			this.set( latlng );
+		}
 
 		this.#marker.on( 'move', () => document.dispatchEvent( this.#changeEvent ) );
 	}
@@ -51,6 +58,7 @@ export default class {
 	set( latlng ) {
 		this.#marker.setLatLng( latlng ).addTo( this.#map );
 		document.dispatchEvent( this.#changeEvent );
+		return this;
 	}
 
 	delete() {

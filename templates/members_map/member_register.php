@@ -12,13 +12,26 @@ use \LearnyboxMap\Template as Tpl;
  * @author     freepius
  * @see        *members_map/main* template
  *
- * @global array         $vars          All the below/template variables
- * @global \stdClass     $form          Form data of the current member
- * @global string        $consent_text  The consent text for registration.
- * @global \WP_Term[]    $categories    The available member categories.
+ * @global array         $vars                      All the below/template variables
+ * @global \stdClass     $form                      Form data of the current member
+ * @global bool          $is_registration_complete  Has the current member completed his registration on Members Map?
+ * @global string        $consent_text              The consent text for registration.
+ * @global \WP_Term[]    $categories                The available member categories.
  */
 ?>
-<h2><?php esc_html_e( 'Register on the map', 'learnyboxmap' ); ?></h2>
+<h2>
+	<?php
+	echo esc_html(
+		$is_registration_complete
+			? __( 'Update your map profile', 'learnyboxmap' )
+			: __( 'Register on the map', 'learnyboxmap' )
+	);
+	?>
+</h2>
+
+<p id="note-on-required-fields">
+	<?php echo wp_kses( __( 'Fields marked with <b>*</b> are required.', 'learnyboxmap' ), array( 'b' => true ) ); ?>
+</p>
 
 <?php
 if ( $form->errors ) {

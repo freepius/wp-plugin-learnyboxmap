@@ -10,7 +10,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	const unknownAddressError = document.getElementById( 'error-address' );
 
-	const lbmap = new LearnyboxMap();
+	const lbmap = new LearnyboxMap( memberCoords.value );
 
 	/**
 	 * On *search-address* button click:
@@ -30,8 +30,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const coords = await lbmap.latlngFromAddress( memberAddress.value );
 
 		if ( coords ) {
-			lbmap.currentMember.set( coords );
-			lbmap.currentMember.focusOn();
+			lbmap.currentMember.set( coords ).focusOn();
 			unknownAddressError.style.display = 'none';
 		} else {
 			lbmap.currentMember.delete();

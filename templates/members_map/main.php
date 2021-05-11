@@ -43,16 +43,9 @@ Asset::enqueue_css_js( 'members-map' );
 	<main id="map"></main>
 
 	<?php
-	if ( false === $is_registration_complete ) {
+	if ( true /*false === $is_registration_complete*/ ) {
 		// Case of a member whose registration on the LearnyBox Map is NOT complete yet.
-		\LearnyboxMap\Template::render(
-			'members_map/member_register',
-			array(
-				'form'         => $form,
-				'consent_text' => $consent_text,
-				'categories'   => $categories,
-			)
-		);
+		\LearnyboxMap\Template::render( 'members_map/member_register', $vars );
 	} else {
 		// Case of a member whose registration on the LearnyBox Map is complete.
 		Template::render(

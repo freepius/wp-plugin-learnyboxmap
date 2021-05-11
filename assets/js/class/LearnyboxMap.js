@@ -46,11 +46,11 @@ export default class {
 	currentMember
 
 	/**
-	 *
+	 * @param {(string|L.LatLngExpression)} [latlng] Initial current member marker coordinates, if any.
 	 */
-	constructor() {
+	constructor( latlng ) {
 		this.#map = L.map( 'map', this.#mapOptions );
-		this.currentMember = new CurrentMemberMarker( this.#map );
+		this.currentMember = new CurrentMemberMarker( this.#map, latlng );
 
 		this.#addBaseLayers();
 
