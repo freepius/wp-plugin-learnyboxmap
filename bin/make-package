@@ -1,0 +1,11 @@
+#!/bin/bash
+
+dir=package/learnyboxmap
+
+rm -rf $dir || true
+mkdir $dir
+
+cp -R assets languages src templates vendor *.php *.txt $dir
+
+cd package
+zip -r learnyboxmap learnyboxmap
