@@ -146,11 +146,13 @@ class Member {
 			$errors['name'] = __( 'members_map.form_error.required', 'learnyboxmap' );
 		}
 
-		// Check category.
-		if ( -1 === $form->category ) {
-			$errors['category'] = __( 'members_map.form_error.required', 'learnyboxmap' );
-		} elseif ( array() === array_filter( $categories, fn ( \WP_Term $cat ): bool => $form->category === $cat->term_id ) ) {
-			$errors['category'] = __( 'members_map.form_error.category.invalid', 'learnyboxmap' );
+		// Check category, if any.
+		if ( array() !== $categories ) {
+			if ( -1 === $form->category ) {
+				$errors['category'] = __( 'members_map.form_error.required', 'learnyboxmap' );
+			} elseif ( array() === array_filter( $categories, fn ( \WP_Term $cat ): bool => $form->category === $cat->term_id ) ) {
+				$errors['category'] = __( 'members_map.form_error.category.invalid', 'learnyboxmap' );
+			}
 		}
 
 		// Check and sanitize geo. coordinates.

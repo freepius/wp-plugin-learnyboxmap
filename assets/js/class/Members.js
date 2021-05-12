@@ -37,18 +37,22 @@ export default class {
 		}
 
 		// Add control for category layers.
-		L.control.layers( {}, layersForControl, { collapsed: false } ).addTo( this.#map );
+		if ( 0 !== Object.entries( layersForControl ).length ) {
+			L.control.layers( {}, layersForControl, { collapsed: false } ).addTo( this.#map );
+		}
 
 		// For each member, create its marker and add it to the proper category layer.
 		for ( const [ name, categoryId, latitude, longitude, description ] of members ) {
-			const category = categories[ categoryId ];
+			const category = categories[ categoryId ] ?? {
+				icon: L.divIcon( { className: 'member-marker cat-0', iconSize: 15 } ),
+				layer: this.#map,
+			};
 
 			L.marker( [ latitude, longitude ], { icon: category.icon } )
 				.addTo( category.layer )
 				.bindPopup(
-					`<em>${ category.name }</em>
-					<br>
-					<strong>${ name }</strong>
+					( category.name ? `<em>${ category.name }</em><br>` : '' ) +
+					`<strong>${ name }</strong>
 					${ description ? `<hr>${ description }` : '' }`
 				)
 				.on( 'mouseover', ( e ) => e.target.openPopup() );
