@@ -1,63 +1,222 @@
-# Copyright (C) 2021 freepius
-# This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: LearnyboxMap 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/learnyboxmap\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-03-10T14:43:21+01:00\n"
+"POT-Creation-Date: 2021-05-12T17:18:34+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0-alpha-59d879d\n"
+"X-Generator: WP-CLI 2.5.0-alpha-8895ea9\n"
 "X-Domain: learnyboxmap\n"
 
-#. Plugin Name of the plugin
-msgid "LearnyboxMap"
-msgstr ""
+#: Controller/MembersMap.php:35
+msgid "members_map.error"
+msgstr "Une erreur est survenue sur la carte des membres LearnyBox. Veuillez réessayer ou contacter l'administrateur de la formation."
 
-#. Plugin URI of the plugin
-msgid "https://github.com/freepius/wp-plugin-learnybox-map"
-msgstr ""
+#: Entity/PostType/Member.php:40
+msgid "member"
+msgstr "membre"
 
-#. Description of the plugin
-msgid "LearnyboxMap allows your LearnyBox members to be displayed on an interactive map and see other members there."
-msgstr ""
+#: Entity/PostType/Member.php:48
+msgctxt "Post type general name"
+msgid "LearnyBox Members"
+msgstr "Membres LearnyBox"
 
-#. Author of the plugin
-msgid "freepius"
-msgstr ""
+#: Entity/PostType/Member.php:49
+msgctxt "Post type singular name"
+msgid "LearnyBox Member"
+msgstr "Membre LearnyBox"
 
-#. Author URI of the plugin
-msgid "https://freepius.net"
-msgstr ""
+#: Entity/PostType/Member.php:50
+msgctxt "Admin Menu text"
+msgid "Members"
+msgstr "Membres"
 
-#: src/AdminSettings.php:29
+#: Entity/PostType/Member.php:51
+msgid "Add New LearnyBox Member"
+msgstr "Ajouter un nouveau membre"
+
+#: Entity/PostType/Member.php:52
+msgid "Edit LearnyBox Member"
+msgstr "Éditer un membre"
+
+#: Entity/PostType/Member.php:53
+msgid "Search members"
+msgstr "Chercher des membres"
+
+#: Entity/PostType/Member.php:54
+msgid "No members found."
+msgstr "Aucun membre n'a été trouvé."
+
+#: Entity/PostType/Member.php:63
+msgid "Represents a LearnyBox Member"
+msgstr "Représente un membre LearnyBox"
+
+#: Entity/Taxonomy/Category.php:33
+msgid "Represents the category of a LearnyBox member"
+msgstr "Représente la catégorie d'un membre LearnyBox"
+
+#: Option.php:76
+msgid "The URL does not follow the expected pattern \"https://{your-sub-domain}.learnybox.com/\""
+msgstr "Le format de l'URL est incorrect (format attendu : \"https://{votre-sous-domaine}.learnybox.com/\")"
+
+#: Option.php:85
+msgid "The training ID is not a valid numeric value (must be positive or null)"
+msgstr "L'ID de la formation doit être un nombre supérieur ou égal à zéro"
+
+#: Settings.php:29
 msgid "Settings for the LearnyboxMap plugin"
-msgstr "Réglages pour l'extension Learnybox Map"
+msgstr "Réglages de l'extension LearnyboxMap"
 
-#: src/AdminSettings.php:30
+#: Settings.php:30
 msgid "Settings"
 msgstr "Réglages"
 
-#: src/AdminSettings.php:53
-msgid "LearnyBox API settings"
-msgstr "Paramètres de votre API LearnyBox"
+#: Settings.php:64
+msgid "LearnyBox settings"
+msgstr "Paramètres LearnyBox"
 
-#: src/AdminSettings.php:59
+#: Settings.php:70
 msgid "Your LearnyBox API key"
 msgstr "Votre clé API LearnyBox"
 
-#: src/AdminSettings.php:60
+#: Settings.php:71
 msgid "Your LearnyBox URL"
-msgstr "L'adresse de votre LearnyBox"
+msgstr "Votre URL LearnyBox"
 
-#: src/AdminSettings.php:76
-msgid "section_api_help"
-msgstr "Les paramètres à saisir sont à retrouver dans votre compte LearnyBox, section Learny Connect."
+#: Settings.php:73
+msgid "ID of one of your LearnyBox trainings"
+msgstr "ID d'une de vos formations LearnyBox"
 
-#: src/AdminSettings.php:95
-msgid "Error: the URL entered doesn't follow the expected pattern \"https://{your-sub-domain}.learnybox.com/\""
-msgstr "Erreur : l'adresse saisie n'a pas la forme attendue \"https://{votre-sous-domaine}.learnybox.com/\""
+#: Settings.php:79
+msgid "Members Map page settings"
+msgstr "Paramètres de la page \"Carte des membres\""
+
+#: Settings.php:86
+msgid "Consent text"
+msgstr "Texte de consentement"
+
+#: Settings.php:90
+msgid "admin.settings.field_consent_text_help"
+msgstr "Texte que chaque membre doit accepter pour valider son inscription à la carte."
+
+#: Settings.php:91
+msgid "admin.settings.field_consent_text_default"
+msgstr " "
+
+#: Settings.php:114
+msgid "admin.settings.section_learnybox_help"
+msgstr " "
+
+#: Settings.php:121
+msgid "admin.settings.section_members_map_help"
+msgstr " "
+
+#: Settings.php:206
+msgid "Error:"
+msgstr "Erreur :"
+
+#: Transformer/PostType/Member.php:146
+#: Transformer/PostType/Member.php:151
+#: Transformer/PostType/Member.php:158
+msgid "members_map.form_error.required"
+msgstr "Ce champ est obligatoire."
+
+#: Transformer/PostType/Member.php:153
+msgid "members_map.form_error.category.invalid"
+msgstr "Catégorie invalide"
+
+#: Transformer/PostType/Member.php:166
+msgid "members_map.form_error.geo_coordinates.invalid"
+msgstr "Coordonnées géographiques invalides"
+
+#: members_map/main.php:28
+msgid "The members map"
+msgstr "Carte des membres"
+
+#: members_map/main.php:39
+msgid "Your marker is here. Drag-drop it to change its position."
+msgstr "Vous êtes ici. Glisser et déposer le marqueur pour changer votre position."
+
+#: members_map/member_register.php:26
+msgid "Update your map profile"
+msgstr "Mettre à jour votre profil"
+
+#: members_map/member_register.php:27
+msgid "Register on the map"
+msgstr "Je m'enregistre sur la carte"
+
+#: members_map/member_register.php:33
+msgid "Fields marked with <b>*</b> are required."
+msgstr "Les champs marqués d'un <b>*</b> sont obligatoires."
+
+#: members_map/member_register.php:40
+msgid "There are errors in the form. Please correct them to continue. "
+msgstr "Le formulaire contient des erreurs. Veuillez les corriger."
+
+#: members_map/member_register.php:54
+msgid "My name or nickname"
+msgstr "Mon nom, prénom, surnom..."
+
+#: members_map/member_register.php:55
+msgid "members_map.field_name_help"
+msgstr "Visible par les autres membres, au survol de votre point sur la carte."
+
+#: members_map/member_register.php:64
+msgid "My category"
+msgstr "Ma catégorie"
+
+#: members_map/member_register.php:66
+msgid "members_map.field_category_help"
+msgstr "Visible par les autres membres, au survol de votre point sur la carte."
+
+#: members_map/member_register.php:75
+msgid "My geographical coordinates"
+msgstr "Mes coordonnées géographiques"
+
+#: members_map/member_register.php:80
+msgid "See / place my marker on the map"
+msgstr "Voir & placer mon marqueur sur la carte."
+
+#: members_map/member_register.php:82
+msgid "members_map.field_geo_coordinates_help"
+msgstr "Pour éditer vos coordonées géographiques, 2 solutions :\
+<ol>\
+    <li><b>Cliquez</b> sur le bouton à droite, puis <b>glissez-déposez</b> votre marqueur sur la carte.</li>\
+    <li><b>Saisissez</b> un lieu / une adresse dans le champ ci-après, puis <b>cliquez</b> sur son bouton de droite.</li>\
+</ol>"
+
+#: members_map/member_register.php:90
+msgid "My place / address"
+msgstr "Mon lieu / adresse"
+
+#: members_map/member_register.php:95
+msgid "Find this place / address on the map, then update my geographical coordinates accordingly"
+msgstr "Trouver ce lieu / cette adresse sur la carte, puis mettre à jour mes coordonnées en conséquence"
+
+#: members_map/member_register.php:97
+msgid "members_map.field_address_help"
+msgstr "Ne sera pas visible des autres membres."
+
+#: members_map/member_register.php:98
+msgid "members_map.form_error.address.unknown"
+msgstr "Ce lieu / cette adresse n'a pas été trouvé/e."
+
+#: members_map/member_register.php:105
+msgid "What do I have to say about myself?"
+msgstr "Qu'ai-je à dire aux autres, à propos de moi ?"
+
+#: members_map/member_register.php:106
+msgid "members_map.field_description_help"
+msgstr "Visible par les autres membres, au survol de votre point sur la carte."
+
+#: members_map/member_register.php:134
+msgid "My consent"
+msgstr "Mon consentement"
+
+#: members_map/member_register.php:141
+msgid "Validate"
+msgstr "Je valide"

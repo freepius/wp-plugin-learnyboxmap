@@ -51,7 +51,7 @@ if ( $form->errors ) {
 	<!-- Member name: required -->
 	<?php //phpcs:disable
 	Tpl::field( $form, 'name', 'text', array(
-		'label'    => __( 'Name to display', 'learnyboxmap' ),
+		'label'    => __( 'My name or nickname', 'learnyboxmap' ),
 		'help'     => __( 'members_map.field_name_help', 'learnyboxmap' ),
 		'required' => true,
 	) );
@@ -72,14 +72,14 @@ if ( $form->errors ) {
 	<!-- Member geo coordinates: required but readonly -->
 	<div class="required">
 	<?php
-		Tpl::label( 'geo_coordinates', __( 'Geographical coordinates', 'learnyboxmap' ) )
+		Tpl::label( 'geo_coordinates', __( 'My geographical coordinates', 'learnyboxmap' ) )
 			::input( 'geo_coordinates', $form->geo_coordinates, 'text', array( 'readonly' => true ) )
 			::button(
 				'member-marker',
 				Tpl::img_( 'icon-member-marker-30x30.png' ),
 				array( 'title' => __( 'See / place my marker on the map', 'learnyboxmap' ) )
 			)
-			::help( __( 'members_map.field_geo_coordinates_help', 'learnyboxmap' ) )
+			::help( __( 'members_map.field_geo_coordinates_help', 'learnyboxmap' ), 'div' )
 			::error( $form->errors, 'geo_coordinates' );
 		?>
 	</div>

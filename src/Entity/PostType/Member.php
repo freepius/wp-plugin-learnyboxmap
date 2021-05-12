@@ -60,14 +60,15 @@ class Member {
 	 */
 	protected function definition(): array {
 		return array(
-			'description'       => __( 'Represents a LearnyBox Member', 'learnyboxmap' ),
-			'labels'            => $this->labels(),
-			'public'            => true,
-			'show_in_menu'      => \LearnyboxMap\Admin::MENU,
-			'show_in_admin_bar' => false,
-			'menu_icon'         => 'dashicons-groups',
-			'rewrite'           => array( 'slug' => $this->slug() ),
-			'supports'          => array( 'title', 'editor', 'custom-fields' ),
+			'description'        => __( 'Represents a LearnyBox Member', 'learnyboxmap' ),
+			'labels'             => $this->labels(),
+			'public'             => true,
+			'publicly_queryable' => false,
+			'show_in_menu'       => \LearnyboxMap\Admin::MENU,
+			'show_in_admin_bar'  => false,
+			'menu_icon'          => 'dashicons-groups',
+			'rewrite'            => array( 'slug' => $this->slug() ),
+			'supports'           => array( 'title', 'editor', 'custom-fields' ),
 		);
 	}
 

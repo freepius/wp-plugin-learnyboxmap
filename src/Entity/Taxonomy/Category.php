@@ -33,6 +33,7 @@ class Category {
 			'description'        => __( 'Represents the category of a LearnyBox member', 'learnyboxmap' ),
 			'hierarchical'       => true, // Hierarchy is not useful in our case, but we want the Category taxonomy labels.
 			'public'             => true,
+			'publicly_queryable' => false,
 			'show_admin_column'  => true,
 			'show_in_nav_menus'  => false,
 		);
