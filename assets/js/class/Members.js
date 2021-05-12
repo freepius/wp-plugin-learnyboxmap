@@ -17,23 +17,33 @@ export default class {
 	 */
 	constructor( map, members, categories ) {
 		this.#map = map;
-		const layersById = {};
-		const layersByName = {};
 
-		// Create one layer by category.
+		let i = 0;
+		const layersForControl = {};
+
+		// For each category: create one layer and one icon type.
 		for ( const [ id, name ] of Object.entries( categories ) ) {
-			layersById[ id ] = L.layerGroup().addTo( this.#map );
-			layersByName[ name ] = layersById[ id ];
+			categories[ id ] = {
+				name,
+				icon: L.divIcon( { className: `member-marker cat-${ i }`, iconSize: 15 } ),
+				layer: L.layerGroup().addTo( this.#map ),
+			};
+
+			layersForControl[ `<span class="cat-${ i++ }">${ name }</span>` ] = categories[ id ].layer;
 		}
 
-		L.control.layers( {}, layersByName, { collapsed: false } ).addTo( this.#map );
+		L.control.layers( {}, layersForControl, { collapsed: false } ).addTo( this.#map );
 
 		// For each member, create its marker and add it to the proper category layer.
 		for ( const [ name, categoryId, latitude, longitude, description ] of members ) {
-			L.marker( [ latitude, longitude ] )
-				.addTo( layersById[ categoryId ] )
+			const category = categories[ categoryId ];
+
+			L.marker( [ latitude, longitude ], { icon: category.icon } )
+				.addTo( category.layer )
 				.bindTooltip(
-					`<strong>${ name }</strong>
+					`<em>${ category.name }</em>
+					<br>
+					<strong>${ name }</strong>
 					${ description ? `<hr>${ description }` : '' }`
 				);
 		}

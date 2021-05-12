@@ -27,6 +27,36 @@ body {
 main#map {
 	width: 100%;
 	height: 600px;
+
+	// red, green, pruple, yello, orange, blue
+	$colors: (
+		0: rgb(235, 42, 42),
+		1: rgb(69, 189, 99),
+		2: rgb(164, 42, 235),
+		3: rgb(231, 235, 46),
+		4: rgb(255, 176, 50),
+		5: rgb(42, 42, 235),
+		6: rgb(58, 240, 231),
+		7: rgb(200, 200, 200)
+	);
+
+	// Member marker icon.
+	.member-marker {
+		border-radius: 50%; // <= make a circle
+		opacity: 0.7;
+	}
+
+	@each $i, $color in $colors {
+		.member-marker.cat-#{$i} {
+			background-color: $color;
+		}
+
+		.leaflet-control-layers-list .cat-#{$i} {
+			color: $color;
+			font-weight: 700;
+		}
+	}
+	// Colors for layer control labels.
 }
 
 .error {

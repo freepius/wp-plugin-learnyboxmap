@@ -1,7 +1,7 @@
 /* global LearnyboxMapPlugin */
 
-import '../styles/members-map.scss';
 import LearnyboxMap from './class/Map';
+import '../styles/members-map.scss';
 
 document.addEventListener( 'DOMContentLoaded', () => {
 	const memberAddress = document.getElementById( 'address' );
