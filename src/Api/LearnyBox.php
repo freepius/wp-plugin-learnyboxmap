@@ -41,7 +41,6 @@ class LearnyBox {
 	 *
 	 * @param integer $user_id The user ID.
 	 * @return \stdClass All the member data.
-	 * @api
 	 */
 	public function get_one_member_by_id( int $user_id ): \stdClass {
 		return (object) $this->request( 'get', "users/$user_id/" )->data;
@@ -52,7 +51,6 @@ class LearnyBox {
 	 *
 	 * @param integer $training_id The training ID.
 	 * @return \Generator<\stdClass> Return a generator of LearnyBox members.
-	 * @api
 	 */
 	public function get_all_members_by_training_id( int $training_id ): \Generator {
 		return $this->get_all( "formations/$training_id/membres/" );

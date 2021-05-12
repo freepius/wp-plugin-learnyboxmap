@@ -1,5 +1,7 @@
+/* global LearnyboxMapPlugin */
+
 import '../styles/members-map.scss';
-import LearnyboxMap from './class/LearnyboxMap';
+import LearnyboxMap from './class/Map';
 
 document.addEventListener( 'DOMContentLoaded', () => {
 	const memberAddress = document.getElementById( 'address' );
@@ -10,7 +12,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	const unknownAddressError = document.getElementById( 'error-address' );
 
-	const lbmap = new LearnyboxMap( memberCoords.value );
+	const lbmap = new LearnyboxMap( LearnyboxMapPlugin.members, LearnyboxMapPlugin.categories, memberCoords.value );
 
 	/**
 	 * On *search-address* button click:

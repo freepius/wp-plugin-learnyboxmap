@@ -1,6 +1,7 @@
 /* global LearnyboxMapPlugin */
 
-import CurrentMemberMarker from './CurrentMemberMarker';
+import Members from './Members';
+import CurrentMember from './CurrentMember';
 
 // Import Leaflet library, plugins and css.
 import L from 'leaflet';
@@ -17,7 +18,7 @@ L.Icon.Default.prototype._getIconUrl = function( name ) {
  */
 export default class {
 	/**
-	 * Some base layers provide by the 'leaflet-providers' plugin
+	 * Some base layers provide by the 'leaflet-providers' plugin.
 	 *
 	 * @see {@link https://leaflet-extras.github.io/leaflet-providers/preview/}
 	 */
@@ -39,18 +40,28 @@ export default class {
 	}
 
 	/**
+	 * Object managing member markers and layers.
+	 *
+	 * @member {Members}
+	 */
+	members
+
+	/**
 	 * Marker of the current member, ie the member who is creating/editing his LearnyboxMap profile.
 	 *
-	 * @member {CurrentMemberMarker}
+	 * @member {CurrentMember}
 	 */
 	currentMember
 
 	/**
+	 * @param {Array<Array<string>>} members An array of registered members.
+	 * @param {Object} categories Object where keys are category IDs and value are category names.
 	 * @param {(string|L.LatLngExpression)} [latlng] Initial current member marker coordinates, if any.
 	 */
-	constructor( latlng ) {
+	constructor( members, categories, latlng ) {
 		this.#map = L.map( 'map', this.#mapOptions );
-		this.currentMember = new CurrentMemberMarker( this.#map, latlng );
+		this.members = new Members( this.#map, members, categories );
+		this.currentMember = new CurrentMember( this.#map, latlng );
 
 		this.#addBaseLayers();
 
@@ -71,7 +82,7 @@ export default class {
 
 		baseLayers[ 'Mapnik (OpenStreetMap)' ].addTo( this.#map );
 
-		L.control.layers( baseLayers ).addTo( this.#map );
+		L.control.layers( baseLayers, {}, { position: 'topleft' } ).addTo( this.#map );
 	}
 
 	/**

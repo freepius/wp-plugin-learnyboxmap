@@ -12,7 +12,7 @@ use WP_Post;
  * Functionalities to manage the LearnyBox members, ie:
  * - Synchronize a member from LearnyBox to WordPress (through the LearnyBox API)
  * - Get, update or delete a member
- * - Get all the members
+ * - Get all members registered on the map.
  *
  * For performance purposes, LearnyBox Member data are stored in a WordPress custom post as follows:
  * - post `title` receives:     name to display on the map (commonly the first and last name, or nickname)
@@ -30,6 +30,23 @@ use WP_Post;
  * @fixme STRONG! Solution: Hash the email.
  */
 class Member {
+	/**
+	 * Get all members registered on the map, ie having a post status to *publish*.
+	 *
+	 * @param array $excepted  An array of Member post IDs to not return.
+	 * @return \WP_Post[]
+	 */
+	public function get_all_registered( array $excepted = array() ) {
+		return get_posts(
+			array(
+				'post_type'      => MemberPostType::name(),
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'post__not_in'   => $excepted,
+			)
+		);
+	}
+
 	/**
 	 * Update a LearnyBox Member from *HTML Form* data.
 	 *

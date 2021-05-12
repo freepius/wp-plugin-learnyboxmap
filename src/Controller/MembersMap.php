@@ -115,6 +115,12 @@ class MembersMap {
 		$v->is_form_validation       = false === empty( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$v->is_registration_complete = 'publish' === get_post_status( $member );
 		$v->consent_text             = Option::get( 'consent_text' );
+		$v->members                  = wp_json_encode(
+			array_map(
+				array( MemberTransformer::class, 'wp_to_min_array' ),
+				$repo->get_all_registered( array( $member->ID ) )
+			)
+		);
 
 		$v->categories = get_terms(
 			array(

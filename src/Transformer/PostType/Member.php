@@ -8,17 +8,19 @@ use LearnyboxMap\Entity\Taxonomy\Category as CategoryTaxonomy;
 /**
  * Transform a LearnyBox Member from one data representation to another.
  *
- * The different representations are:
+ * The different transformations are:
  * - from LearnyBox API to WordPress Post (as array)
+ * - from WordPress Post (as object) to PHP minimalist array.
  * - from WordPress Post (as object) to HTML Form
  * - from HTML Form to WordPress Post (as array)
  * - from $_POST[] to HTML Form
  *
  * Which class generates/controls which representation?
- * - LearnyBox API  by \LearnyboxMap\Api\LearnyBox class
- * - WordPress Post by \LearnyboxMap\Repository\PostType\Member class
- * - HTML Form      by \LearnyboxMap\Controller\MembersMap class
- * - $_POST         by templates/members_map/member_register template
+ * - LearnyBox API    by \LearnyboxMap\Api\LearnyBox class
+ * - WordPress Post   by \LearnyboxMap\Repository\PostType\Member class
+ * - Minimalist array by \LearnyboxMap\Controller\MembersMap class
+ * - HTML Form        by \LearnyboxMap\Controller\MembersMap class
+ * - $_POST           by templates/members_map/member_register template
  *
  * @since      1.0.0
  * @package    LearnyboxMap
@@ -75,6 +77,22 @@ class Member {
 				'geo_latitude'  => $latitude,
 				'geo_longitude' => ltrim( $longitude ),
 			),
+		);
+	}
+
+	/**
+	 * Transform a *LearnyBox Member* WordPress post into a *minimalist array*.
+	 *
+	 * @param \WP_Post $post A *LearnyBox Member* WordPress post.
+	 * @return array Member data in *minimalist array* style.
+	 */
+	public static function wp_to_min_array( \WP_Post $post ): array {
+		return array(
+			$post->post_title,
+			get_the_terms( $post, CategoryTaxonomy::name() )[0]->term_id ?? '',
+			$post->geo_latitude,
+			$post->geo_longitude,
+			$post->post_content,
 		);
 	}
 

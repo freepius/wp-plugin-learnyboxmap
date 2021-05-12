@@ -12,11 +12,11 @@ use \LearnyboxMap\Template as Tpl;
  * @author     freepius
  * @see        *members_map/main* template
  *
- * @global array         $vars                      All the below/template variables
- * @global \stdClass     $form                      Form data of the current member
- * @global bool          $is_registration_complete  Has the current member completed his registration on Members Map?
- * @global string        $consent_text              The consent text for registration.
- * @global \WP_Term[]    $categories                The available member categories.
+ * @param array         $vars                      All the below/template variables
+ * @param \stdClass     $form                      Form data of the current member
+ * @param bool          $is_registration_complete  Has the current member completed his registration on Members Map?
+ * @param string        $consent_text              The consent text for registration.
+ * @param \WP_Term[]    $categories                The available member categories.
  */
 ?>
 <h2>
@@ -42,7 +42,7 @@ if ( $form->errors ) {
 }
 ?>
 
-<form action="?learnyboxmap_page_membersmap=1&member=<?php echo esc_attr( $form->member ); ?>" method="post">
+<form action="?learnyboxmap_page_membersmap=1&amp;member=<?php echo esc_attr( $form->member ); ?>" method="post">
 	<?php
 		wp_nonce_field( $form->nonce, 'nonce', false );
 		Tpl::input( 'member', $form->member, 'hidden' );
