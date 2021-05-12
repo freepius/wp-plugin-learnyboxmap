@@ -105,7 +105,28 @@ if ( $form->errors ) {
 			Tpl::label( 'description', __( 'What do I have to say about myself?', 'learnyboxmap' ) )
 				::help( __( 'members_map.field_description_help', 'learnyboxmap' ), 'div' );
 		?>
-		<textarea id="description" name="description" rows="20" cols="100"><?php echo esc_textarea( $form->description ); ?></textarea>
+		<?php
+		/**
+		 * Edit description with teeny WordPress editor (using TinyMCE editor).
+		 */
+		add_filter(
+			'teeny_mce_buttons',
+			fn ( $buttons ) => array( 'bold', 'italic', 'underline', 'strikethrough', 'link' )
+		);
+
+		wp_editor(
+			$form->description,
+			'description',
+			array(
+				'textarea_name' => 'description',
+				'textarea_rows' => 20,
+				'teeny'         => true,
+				'quicktags'     => false,
+				'media_buttons' => false,
+				'wpautop'       => true,
+			)
+		);
+		?>
 	</div>
 
 	<!-- Consent text and checkbox that member has to accept to validate its registration. -->

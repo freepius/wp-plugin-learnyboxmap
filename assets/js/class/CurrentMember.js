@@ -41,7 +41,9 @@ export default class {
 			this.set( latlng );
 		}
 
-		this.#marker.on( 'move', () => document.dispatchEvent( this.#changeEvent ) );
+		this.#marker
+			.on( 'move', () => document.dispatchEvent( this.#changeEvent ) )
+			.on( 'click', () => this.focusOn() );
 	}
 
 	/**
@@ -75,12 +77,7 @@ export default class {
 			this.set( this.#map.options.center );
 		}
 
-		const [ min, max ] = [ this.#map.options.maxZoom, this.#map.options.minZoom ];
-
-		this.#map.setView(
-			this.#marker.getLatLng(),
-			min + Math.floor( ( max - min ) / 2 )
-		);
+		this.#map.setView( this.#marker.getLatLng(), this.#map.options.medZoom );
 
 		location.href = '#map';
 	}

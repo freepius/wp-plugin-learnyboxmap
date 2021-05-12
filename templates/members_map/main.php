@@ -18,7 +18,9 @@ namespace LearnyboxMap;
  * @param string        $members                   All the registered members (excepted the current one) encoded as javascript array.
  */
 
+wp_enqueue_editor();
 Asset::enqueue_css_js( 'members-map' );
+
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>

@@ -23,15 +23,20 @@ export default class {
 
 		// For each category: create one layer and one icon type.
 		for ( const [ id, name ] of Object.entries( categories ) ) {
+			const layer = L.featureGroup().addTo( this.#map ).on( 'click', ( e ) => {
+				this.#map.setView( e.layer.getLatLng(), this.#map.options.medZoom );
+			} );
+
 			categories[ id ] = {
 				name,
 				icon: L.divIcon( { className: `member-marker cat-${ i }`, iconSize: 15 } ),
-				layer: L.layerGroup().addTo( this.#map ),
+				layer,
 			};
 
 			layersForControl[ `<span class="cat-${ i++ }">${ name }</span>` ] = categories[ id ].layer;
 		}
 
+		// Add control for category layers.
 		L.control.layers( {}, layersForControl, { collapsed: false } ).addTo( this.#map );
 
 		// For each member, create its marker and add it to the proper category layer.
@@ -40,12 +45,13 @@ export default class {
 
 			L.marker( [ latitude, longitude ], { icon: category.icon } )
 				.addTo( category.layer )
-				.bindTooltip(
+				.bindPopup(
 					`<em>${ category.name }</em>
 					<br>
 					<strong>${ name }</strong>
 					${ description ? `<hr>${ description }` : '' }`
-				);
+				)
+				.on( 'mouseover', ( e ) => e.target.openPopup() );
 		}
 	}
 }

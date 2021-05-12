@@ -92,7 +92,7 @@ class Member {
 			get_the_terms( $post, CategoryTaxonomy::name() )[0]->term_id ?? '',
 			$post->geo_latitude,
 			$post->geo_longitude,
-			$post->post_content,
+			nl2br( $post->post_content ),
 		);
 	}
 
@@ -130,16 +130,16 @@ class Member {
 		// No need to check *nonce* here (it's supposed to have already been done).
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 
-		$sanitize = fn ( string $field, string $fn = 'text_field' ): string =>
+		$sanitize = fn ( string $field, string $fn = 'sanitize_text_field' ): string =>
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			call_user_func( "sanitize_$fn", wp_unslash( $_POST[ $field ] ?? '' ) );
+			call_user_func( $fn, wp_unslash( $_POST[ $field ] ?? '' ) );
 
-		$form->member          = $sanitize( 'member', 'email' );
+		$form->member          = $sanitize( 'member', 'sanitize_email' );
 		$form->name            = $sanitize( 'name' );
 		$form->category        = intval( $_POST['category'] ?? -1 );
 		$form->geo_coordinates = $sanitize( 'geo_coordinates' );
 		$form->address         = $sanitize( 'address' );
-		$form->description     = $sanitize( 'description', 'textarea_field' );
+		$form->description     = $sanitize( 'description', 'wp_kses_data' );
 
 		// Check name.
 		if ( empty( $form->name ) ) {

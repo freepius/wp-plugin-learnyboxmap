@@ -37,6 +37,7 @@ export default class {
 		zoom: 5,
 		minZoom: 2,
 		maxZoom: 14,
+		medZoom: 8,
 	}
 
 	/**
