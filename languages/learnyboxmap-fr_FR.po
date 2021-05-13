@@ -139,7 +139,7 @@ msgstr "Carte des membres"
 
 #: members_map/main.php:39
 msgid "Your marker is here. Drag-drop it to change its position."
-msgstr "Vous êtes ici. Glisser et déposer le marqueur pour changer votre position."
+msgstr "Vous êtes ici. Glissez et déposez le marqueur pour changer votre position."
 
 #: members_map/member_register.php:26
 msgid "Update your map profile"

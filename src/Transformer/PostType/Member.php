@@ -38,7 +38,7 @@ class Member {
 		return array(
 			'post_type'    => MemberPostType::name(),
 			'post_title'   => $api_data->_string,
-			'post_name'    => $api_data->email,
+			'post_name'    => wp_hash( $api_data->email ),
 			'post_parent'  => (int) $api_data->user_id,
 			'meta_input'   => array(
 				'email'       => $api_data->email,
@@ -66,7 +66,7 @@ class Member {
 			'post_status'  => 'publish',
 			'post_type'    => MemberPostType::name(),
 			'post_title'   => $form_data->name,
-			'post_name'    => $form_data->member,
+			'post_name'    => wp_hash( $form_data->member ),
 			'post_content' => $form_data->description,
 			'tax_input'    => array(
 				CategoryTaxonomy::name() => array( $form_data->category ),

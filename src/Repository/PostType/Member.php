@@ -25,9 +25,6 @@ use WP_Post;
  * @package    LearnyboxMap
  * @subpackage Repository
  * @author     freepius
- *
- * @fixme STRONG! Collision between 2 post names/slugs is too easy. Search $email in metadata? (not very efficient...)
- * @fixme STRONG! Solution: Hash the email.
  */
 class Member {
 	/**
@@ -75,18 +72,19 @@ class Member {
 	 * @return WP_Post|null
 	 */
 	public function get_by_email( string $email ): ?\WP_Post {
-		$email = sanitize_email( $email );
+		$email        = sanitize_email( $email );
+		$hashed_email = wp_hash( $email );
 
 		$member = new \WP_Query(
 			array(
 				'post_type'      => MemberPostType::name(),
 				'post_status'    => array( 'publish', 'draft' ),
 				'posts_per_page' => 1,
-				'name'           => $email,
+				'name'           => $hashed_email,
 			)
 		);
 
-		return $member->have_posts() ? $member->next_post() : $this->synchronize_by_email( $email );
+		return $member->have_posts() ? $member->next_post() : $this->synchronize_by_email( sanitize_email( $email ) );
 	}
 
 	/**
