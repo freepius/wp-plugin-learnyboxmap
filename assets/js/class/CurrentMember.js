@@ -80,5 +80,8 @@ export default class {
 		this.#map.setView( this.#marker.getLatLng(), this.#map.options.medZoom );
 
 		location.href = '#map';
+
+		// <iframe> case: indicate to the parent window to go on map (ie, on top of the map <iframe>).
+		window.parent.postMessage( 'goOnTop', '*' );
 	}
 }

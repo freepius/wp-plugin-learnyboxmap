@@ -104,7 +104,7 @@ class Template {
 		$attrs += array(
 			'label'    => '',
 			'help'     => '',
-			'required' => false, // @fixme: keep it here, or just in input() ?
+			'required' => false,
 		);
 
 		return sprintf(

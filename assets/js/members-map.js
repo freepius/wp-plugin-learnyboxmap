@@ -4,6 +4,9 @@ import LearnyboxMap from './class/Map';
 import '../styles/members-map.scss';
 
 document.addEventListener( 'DOMContentLoaded', () => {
+	// <iframe> case: pass <body> height to the parent window.
+	window.parent.postMessage( { height: document.body.clientHeight }, '*' );
+
 	const memberAddress = document.getElementById( 'address' );
 	const memberCoords = document.getElementById( 'geo_coordinates' );
 

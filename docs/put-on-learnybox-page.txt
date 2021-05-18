@@ -1,0 +1,44 @@
+<style>
+  #absolute-menu-container .container {
+    width: 100%;
+  }
+
+  #formation > div.col-md-8.col-md-offset-4  {
+    width: calc(100% - 350px);
+    margin-left: 350px;
+  }
+
+  #formation > div.col-md-8.col-md-offset-2 {
+    width: calc(100% - 50px);
+    margin-left: 50px;
+  }
+
+  @media (max-width: 1024px) {
+    #formation > div.col-md-8 {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+  }
+
+  #members-map {
+    width: 100%;
+    height: 2500px;
+    border: 0;
+  }
+</style>
+
+
+$(document).ready(function () {
+  $('#members-map').on('load', function (e) {
+      location.href = '#main-composition';
+    });
+});
+
+<script>
+document.addEventListener( 'DOMContentLoaded', function() {
+	document.getElementById( 'members-map' ).addEventListener( 'load', function() {
+		location.href = '#main-composition';
+	} );
+} );
+</script>
+<iframe id="members-map" src="https://eveil-et-nature.com/?learnyboxmap_page_membersmap=1&member=[[EMAIL]]"></iframe>
