@@ -16,8 +16,16 @@ class Admin {
 		// Add the plugin admin menu for administrators only.
 		add_action( 'admin_menu', array( $this, 'menu_add' ) );
 
-		// Add the missing menu highlight for Category custom taxonomy.
+		// Small hacks to properly highlight our menus and submenus.
 		add_filter( 'parent_file', array( $this, 'menu_highlight' ) );
+		add_filter(
+			'submenu_file',
+			function ( ?string $submenu_file, string $parent_file ) {
+				return null === $submenu_file ? $parent_file : str_replace( '&amp;', '&', $submenu_file );
+			},
+			10,
+			2
+		);
 
 		// Init hooks for settings adminstration.
 		new Settings();
@@ -41,7 +49,11 @@ class Admin {
 			null,
 			__( 'Categories', 'default' ),
 			'administrator',
-			sprintf( 'edit-tags.php?taxonomy=%s', Entity\Taxonomy\Category::name() )
+			sprintf(
+				'edit-tags.php?taxonomy=%s&post_type=%s',
+				Entity\Taxonomy\Category::name(),
+				Entity\PostType\Member::name()
+			)
 		);
 	}
 

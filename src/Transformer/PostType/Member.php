@@ -68,9 +68,6 @@ class Member {
 			'post_title'   => $form_data->name,
 			'post_name'    => wp_hash( $form_data->member ),
 			'post_content' => $form_data->description,
-			'tax_input'    => array(
-				CategoryTaxonomy::name() => array( $form_data->category ),
-			),
 			'meta_input'   => array(
 				'email'         => $form_data->member,
 				'geo_address'   => $form_data->address,

@@ -36,9 +36,19 @@ $(document).ready(function () {
 
 <script>
 document.addEventListener( 'DOMContentLoaded', function() {
-	document.getElementById( 'members-map' ).addEventListener( 'load', function() {
+	const membersMapIframe = document.getElementById( 'members-map' );
+
+	membersMapIframe.addEventListener( 'load', function() {
 		location.href = '#main-composition';
 	} );
+
+	window.addEventListener( 'message', ( e ) => {
+		if ( e.data instanceof Object && e.data.hasOwnProperty( 'height' ) && Number.isInteger( e.data.height ) ) {
+			membersMapIframe.style.height = ( e.data.height + 100 ) + 'px';
+		} else if ( 'goOnTop' === e.data ) {
+			location.href = '#main-composition';
+		}
+	}, false );
 } );
 </script>
 <iframe id="members-map" src="https://eveil-et-nature.com/?learnyboxmap_page_membersmap=1&member=[[EMAIL]]"></iframe>

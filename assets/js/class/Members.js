@@ -23,9 +23,7 @@ export default class {
 
 		// For each category: create one layer and one icon type.
 		for ( const [ id, name ] of Object.entries( categories ) ) {
-			const layer = L.featureGroup().addTo( this.#map ).on( 'click', ( e ) => {
-				this.#map.setView( e.layer.getLatLng(), this.#map.options.medZoom );
-			} );
+			const layer = L.layerGroup().addTo( this.#map );
 
 			categories[ id ] = {
 				name,
@@ -55,7 +53,10 @@ export default class {
 					`<strong>${ name }</strong>
 					${ description ? `<hr>${ description }` : '' }`
 				)
-				.on( 'mouseover', ( e ) => e.target.openPopup() );
+				.on( 'mouseover', ( e ) => e.target.openPopup() )
+				.on( 'click', ( e ) => {
+					this.#map.setView( e.latlng, this.#map.options.medZoom );
+				} );
 		}
 	}
 }

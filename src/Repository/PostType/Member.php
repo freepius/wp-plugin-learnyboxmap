@@ -5,8 +5,8 @@ namespace LearnyboxMap\Repository\PostType;
 use LearnyboxMap\Option;
 use LearnyboxMap\Api\LearnyBox as LearnyBoxAPI;
 use LearnyboxMap\Entity\PostType\Member as MemberPostType;
+use LearnyboxMap\Entity\Taxonomy\Category;
 use LearnyboxMap\Transformer\PostType\Member as MemberTransformer;
-use WP_Post;
 
 /**
  * Functionalities to manage the LearnyBox members, ie:
@@ -49,13 +49,21 @@ class Member {
 	 *
 	 * @param \WP_Post  $member     Member post to update.
 	 * @param \stdClass $form_data  *HTML Form* data.
-	 * @return WP_Post|null The updated Member post, or null in case of error.
+	 * @return \WP_Post|null The updated Member post, or null in case of error.
 	 */
 	public function update_by_form_data( \WP_Post $member, \stdClass $form_data ): ?\WP_Post {
 		$post_id = wp_update_post(
 			array( 'ID' => $member->ID )
 			+ sanitize_post( MemberTransformer::form_to_wp( $form_data ), 'db' )
 		);
+
+		// Cannot use the 'tax_input' arg of wp_update_post() to update a taxonomy
+		// because we are potentially running this function without user context.
+		// In that case: no user = no permissions = no terms being assigned.
+		// But wp_set_object_terms() doesn't check permissions.
+		if ( -1 !== $form_data->category ) {
+			wp_set_object_terms( $post_id, (int) $form_data->category, Category::name() );
+		}
 
 		return get_post( $post_id );
 	}
@@ -69,7 +77,7 @@ class Member {
 	 * 3. If no member was found, return null.
 	 *
 	 * @param string $email Unsanitized email address with which search a LearnyBox Member.
-	 * @return WP_Post|null
+	 * @return \WP_Post|null
 	 */
 	public function get_by_email( string $email ): ?\WP_Post {
 		$email        = sanitize_email( $email );
