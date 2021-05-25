@@ -143,7 +143,7 @@ msgstr "Vous êtes ici. Glissez et déposez le marqueur pour changer votre posit
 
 #: members_map/member_register.php:26
 msgid "Update your map profile"
-msgstr "Mettre à jour votre profil"
+msgstr "Mettre à jour mon profil"
 
 #: members_map/member_register.php:27
 msgid "Register on the map"
@@ -211,7 +211,8 @@ msgstr "Qu'ai-je à dire aux autres, à propos de moi ?"
 
 #: members_map/member_register.php:106
 msgid "members_map.field_description_help"
-msgstr "Visible par les autres membres, au survol de votre point sur la carte."
+msgstr "Visible par les autres membres, au survol de votre point sur la carte.<br>\
+Possibilité d'ajouter votre adresse mail si vous acceptez d'être contacté·e par d'autres membres de la formation."
 
 #: members_map/member_register.php:134
 msgid "My consent"
