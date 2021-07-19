@@ -31,10 +31,10 @@ class Member {
 	 * Get all members registered on the map, ie having a post status to *publish*.
 	 *
 	 * @param array $excepted  An array of Member post IDs to not return.
-	 * @return \WP_Post[]
+	 * @return \WP_Post[] Return posts indexed by their ID.
 	 */
 	public function get_all_registered( array $excepted = array() ) {
-		return get_posts(
+		$posts = get_posts(
 			array(
 				'post_type'      => MemberPostType::name(),
 				'post_status'    => 'publish',
@@ -42,6 +42,12 @@ class Member {
 				'post__not_in'   => $excepted,
 			)
 		);
+
+		foreach ( $posts as $post ) {
+			$returned[ $post->ID ] = $post;
+		}
+
+		return $returned ?? array();
 	}
 
 	/**

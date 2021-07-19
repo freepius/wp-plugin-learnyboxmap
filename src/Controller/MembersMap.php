@@ -125,12 +125,16 @@ class MembersMap {
 		$v->register_status          = $wp->query_vars['register_status'] ?? '';
 		$v->consent_text             = Option::get( 'consent_text' );
 
-		$v->members = wp_json_encode(
-			array_map(
-				array( MemberTransformer::class, 'wp_to_min_array' ),
-				$repo->get_all_registered( array( $member->ID ) )
-			)
+		// Get all registered members.
+		$v->members = array_map(
+			array( MemberTransformer::class, 'wp_to_min_array' ),
+			$repo->get_all_registered()
 		);
+
+		// If current member is already registered, add a marker (ie `true`) on it.
+		if ( array_key_exists( $member->ID, $v->members ) ) {
+			$v->members[ $member->ID ][] = true;
+		}
 
 		$v->categories = get_terms(
 			array(
@@ -174,26 +178,28 @@ class MembersMap {
 	/**
 	 * Enqueue the css and javascript for Members Map.
 	 *
-	 * @param string|null     $members     LearnyBox Members encoded as javascript array.
+	 * @param \WP_Post[]|null $members     LearnyBox Members indexed by their ID.
 	 * @param \WP_Term[]|null $categories  LearnyBox Member categories.
 	 */
-	public static function enqueue_scripts_and_styles( ?string $members = null, ?array $categories = null ): void {
+	public static function enqueue_scripts_and_styles( ?array $members = null, ?array $categories = null ): void {
 		$repo = new MemberRepository();
+
+		$members ??= array_map(
+			array( MemberTransformer::class, 'wp_to_min_array' ),
+			$repo->get_all_registered()
+		);
+
+		$categories ??= get_terms(
+			array(
+				'taxonomy'   => CategoryTaxonomy::name(),
+				'hide_empty' => false,
+			)
+		);
 
 		// Variables/data sent to template.
 		$v = array(
-			'members' => $members ?? wp_json_encode(
-				array_map(
-					array( MemberTransformer::class, 'wp_to_min_array' ),
-					$repo->get_all_registered()
-				)
-			),
-			'categories' => $categories ?? get_terms(
-				array(
-					'taxonomy'   => CategoryTaxonomy::name(),
-					'hide_empty' => false,
-				)
-			),
+			'members'    => wp_json_encode( array_values( $members ) ),
+			'categories' => $categories,
 		);
 
 		Asset::enqueue_css_js( 'members-map' );

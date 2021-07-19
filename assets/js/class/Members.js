@@ -14,8 +14,9 @@ export default class {
 	 * @param {L.Map} map
 	 * @param {Array<Array<string>>} members  Array of registered members.
 	 * @param {Object} categories Object where keys are category IDs and value are category names.
+	 * @param {?L.Marker} currentMemberMarker Marker of current member (if any).
 	 */
-	constructor( map, members, categories ) {
+	constructor( map, members, categories, currentMemberMarker ) {
 		this.#map = map;
 
 		let i = 0;
@@ -40,14 +41,17 @@ export default class {
 		}
 
 		// For each member, create its marker and add it to the proper category layer.
-		for ( const [ name, categoryId, latitude, longitude, description ] of members ) {
+		for ( const [ name, categoryId, latitude, longitude, description, isCurrentMember ] of members ) {
 			const category = categories[ categoryId ] ?? {
 				icon: L.divIcon( { className: 'member-marker cat-0', iconSize: 15 } ),
 				layer: this.#map,
 			};
 
-			L.marker( [ latitude, longitude ], { icon: category.icon } )
-				.addTo( category.layer )
+			const marker = isCurrentMember
+				? currentMemberMarker
+				: L.marker( [ latitude, longitude ], { icon: category.icon } ).addTo( category.layer );
+
+			marker
 				.bindPopup(
 					( category.name ? `<em>${ category.name }</em><br>` : '' ) +
 					`<strong>${ name }</strong>
