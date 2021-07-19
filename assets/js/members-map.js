@@ -15,7 +15,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	const unknownAddressError = document.getElementById( 'error-address' );
 
-	const lbmap = new LearnyboxMap( LearnyboxMapPlugin.members, LearnyboxMapPlugin.categories, memberCoords.value );
+	const lbmap = new LearnyboxMap( LearnyboxMapPlugin.members, LearnyboxMapPlugin.categories, memberCoords?.value );
 
 	/**
 	 * On *search-address* button click:
@@ -25,7 +25,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	 * - go on map and center on these coords
 	 * - if no coord found: delete current member marker
 	 */
-	searchAddressButton.addEventListener( 'click', async ( e ) => {
+	searchAddressButton?.addEventListener( 'click', async ( e ) => {
 		e.preventDefault();
 
 		if ( '' === memberAddress.value ) {
@@ -43,7 +43,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 	} );
 
-	memberMarkerButton.addEventListener( 'click', ( e ) => {
+	memberMarkerButton?.addEventListener( 'click', ( e ) => {
 		e.preventDefault();
 		lbmap.currentMember.focusOn();
 	} );

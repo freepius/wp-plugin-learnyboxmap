@@ -57,12 +57,15 @@ export default class {
 	/**
 	 * @param {Array<Array<string>>} members An array of registered members.
 	 * @param {Object} categories Object where keys are category IDs and value are category names.
-	 * @param {(string|L.LatLngExpression)} [latlng] Initial current member marker coordinates, if any.
+	 * @param {(string|L.LatLngExpression|null)} [latlng] Initial current member marker coordinates, if any.
 	 */
 	constructor( members, categories, latlng ) {
 		this.#map = L.map( 'map', this.#mapOptions );
 		this.members = new Members( this.#map, members, categories );
-		this.currentMember = new CurrentMember( this.#map, latlng );
+
+		if ( latlng ) {
+			this.currentMember = new CurrentMember( this.#map, latlng );
+		}
 
 		this.#addBaseLayers();
 

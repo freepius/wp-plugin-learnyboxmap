@@ -17,14 +17,30 @@ class Template {
 	/**
 	 * Print a php template.
 	 *
-	 * @param string          $template  Template name, commonly the file name without extension.
+	 * @param string          $template  Template name, commonly the file name without `.php` extension.
 	 * @param array|\stdClass $vars      Variables that the template has access.
 	 */
 	public static function render( string $template, $vars = array() ): string {
 		$vars = (array) $vars;
 		extract( $vars ); // phpcs:ignore WordPress.PHP.DontExtract
-		require self::PATH . $template . '.php';
+		include self::PATH . $template . '.php';
 		return self::class;
+	}
+
+	/**
+	 * Render a php template and return its content as a string.
+	 *
+	 * @param string          $template  Template name, commonly the file name without `.php` extension.
+	 * @param array|\stdClass $vars      Variables that the template has access.
+	 * @return string
+	 */
+	public static function render_as_string( string $template, $vars = array() ): string {
+		ob_start();
+			static::render( $template, $vars );
+			$rendered = ob_get_contents();
+		ob_end_clean();
+
+		return $rendered;
 	}
 
 	/**

@@ -2,6 +2,7 @@
 
 namespace LearnyboxMap\Controller;
 
+use \LearnyboxMap\Asset;
 use \LearnyboxMap\Option;
 use \LearnyboxMap\Template;
 use \LearnyboxMap\Entity\PostType\Member as MemberPostType;
@@ -115,7 +116,8 @@ class MembersMap {
 		$v->is_form_validation       = false === empty( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$v->is_registration_complete = 'publish' === get_post_status( $member );
 		$v->consent_text             = Option::get( 'consent_text' );
-		$v->members                  = wp_json_encode(
+
+		$v->members = wp_json_encode(
 			array_map(
 				array( MemberTransformer::class, 'wp_to_min_array' ),
 				$repo->get_all_registered( array( $member->ID ) )
@@ -152,7 +154,41 @@ class MembersMap {
 			}
 		}
 
-		Template::render( 'members_map/main', $v );
+		Template::render( 'members_map/public_standalone', $v );
 		exit;
+	}
+
+	/**
+	 * Enqueue the css and javascript for Members Map.
+	 *
+	 * @param string|null     $members     LearnyBox Members encoded as javascript array.
+	 * @param \WP_Term[]|null $categories  LearnyBox Member categories.
+	 */
+	public static function enqueue_scripts_and_styles( ?string $members = null, ?array $categories = null ): void {
+		$repo = new MemberRepository();
+
+		// Variables/data sent to template.
+		$v = array(
+			'members' => $members ?? wp_json_encode(
+				array_map(
+					array( MemberTransformer::class, 'wp_to_min_array' ),
+					$repo->get_all_registered()
+				)
+			),
+			'categories' => $categories ?? get_terms(
+				array(
+					'taxonomy'   => CategoryTaxonomy::name(),
+					'hide_empty' => false,
+				)
+			),
+		);
+
+		Asset::enqueue_css_js( 'members-map' );
+
+		wp_add_inline_script(
+			'members-map',
+			Template::render_as_string( 'members_map/map.js', $v ),
+			'before'
+		);
 	}
 }

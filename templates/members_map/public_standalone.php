@@ -19,7 +19,7 @@ namespace LearnyboxMap;
  */
 
 wp_enqueue_editor();
-Asset::enqueue_css_js( 'members-map' );
+\LearnyboxMap\Controller\MembersMap::enqueue_scripts_and_styles( $members, $categories );
 
 ?>
 <!doctype html>
@@ -32,39 +32,13 @@ Asset::enqueue_css_js( 'members-map' );
 			wp_print_styles();
 			wp_print_head_scripts();
 		?>
-		<script>
-			const LearnyboxMapPlugin = {
-				buildUrl: '<?php echo esc_js( Asset::BUILD_URL ); ?>',
-				t: {
-					CurrentMemberMarkerTitle: '<?php echo esc_js( __( 'Your marker is here. Drag-drop it to change its position.', 'learnyboxmap' ) ); ?>',
-				},
-				members: <?php echo $members; // phpcs:ignore WordPress.Security.EscapeOutput, <= already escaped for a js usage ?>,
-				categories: {
-					<?php array_map( fn ( $c ) => printf( '"%s": "%s", ', (int) $c->term_id, esc_js( $c->name ) ), $categories ); ?>
-				}
-			};
-		</script>
 	</head>
-	<body>
+	<body class="learnyboxmap-standalone">
 
 	<main id="map"></main>
 
 	<?php
-	if ( true /*false === $is_registration_complete*/ ) {
-		// Case of a member whose registration on the LearnyBox Map is NOT complete yet.
-		\LearnyboxMap\Template::render( 'members_map/member_register', $vars );
-	} else {
-		// Case of a member whose registration on the LearnyBox Map is complete.
-		Template::render(
-			'members_map/member_manage',
-			array(
-				'form'         => $form,
-				'consent_text' => $consent_text,
-				'categories'   => $categories,
-			)
-		);
-	}
-
+	\LearnyboxMap\Template::render( 'members_map/member_register', $vars );
 	wp_print_footer_scripts();
 	?>
 	</body>

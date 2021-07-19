@@ -7,12 +7,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-05-12T17:18:34+02:00\n"
+"POT-Creation-Date: 2021-07-19T13:15:43+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0-alpha-8895ea9\n"
 "X-Domain: learnyboxmap\n"
 
-#: Controller/MembersMap.php:35
+#: Admin.php:65
+msgid "The map"
+msgstr "La carte"
+
+#: Controller/MembersMap.php:36
 msgid "members_map.error"
 msgstr "Une erreur est survenue sur la carte des membres LearnyBox. Veuillez réessayer ou contacter l'administrateur de la formation."
 
@@ -119,25 +123,21 @@ msgstr " "
 msgid "Error:"
 msgstr "Erreur :"
 
-#: Transformer/PostType/Member.php:146
-#: Transformer/PostType/Member.php:151
-#: Transformer/PostType/Member.php:158
+#: Transformer/PostType/Member.php:143
+#: Transformer/PostType/Member.php:149
+#: Transformer/PostType/Member.php:157
 msgid "members_map.form_error.required"
 msgstr "Ce champ est obligatoire."
 
-#: Transformer/PostType/Member.php:153
+#: Transformer/PostType/Member.php:151
 msgid "members_map.form_error.category.invalid"
 msgstr "Catégorie invalide"
 
-#: Transformer/PostType/Member.php:166
+#: Transformer/PostType/Member.php:165
 msgid "members_map.form_error.geo_coordinates.invalid"
 msgstr "Coordonnées géographiques invalides"
 
-#: members_map/main.php:28
-msgid "The members map"
-msgstr "Carte des membres"
-
-#: members_map/main.php:39
+#: members_map/map.js.php:20
 msgid "Your marker is here. Drag-drop it to change its position."
 msgstr "Vous êtes ici. Glissez et déposez le marqueur pour changer votre position."
 
@@ -221,3 +221,7 @@ msgstr "Mon consentement"
 #: members_map/member_register.php:141
 msgid "Validate"
 msgstr "Je valide"
+
+#: members_map/public_standalone.php:28
+msgid "The members map"
+msgstr "Carte des membres"

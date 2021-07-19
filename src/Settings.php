@@ -86,7 +86,6 @@ class Settings {
 			__( 'Consent text', 'learnyboxmap' ),
 			array(
 				'type'            => 'html_editor',
-				// 'help'         => __( 'Consent text that your LearnyBox members have to accept to be registered and displayed on the Members Map', 'learnyboxmap' ),
 				'help'            => __( 'admin.settings.field_consent_text_help', 'learnyboxmap' ),
 				'default_content' => __( 'admin.settings.field_consent_text_default', 'learnyboxmap' ),
 			),

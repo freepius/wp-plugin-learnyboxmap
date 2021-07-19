@@ -2,6 +2,8 @@
 
 namespace LearnyboxMap;
 
+use LearnyboxMap\Controller\MembersMap;
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -55,6 +57,16 @@ class Admin {
 				Entity\PostType\Member::name()
 			)
 		);
+
+		// Submenu to display the Map.
+		add_submenu_page(
+			self::MENU,
+			__( 'The members map', 'learnyboxmap' ),
+			__( 'The map', 'learnyboxmap' ),
+			'administrator',
+			self::MENU . '_map',
+			array( $this, 'map_page' )
+		);
 	}
 
 	public function menu_highlight( string $parent_file ): string {
@@ -63,5 +75,17 @@ class Admin {
 		return Entity\Taxonomy\Category::name() === $current_screen->taxonomy
 			? self::MENU
 			: $parent_file;
+	}
+
+	/**
+	 * Display the Members Map in admin context.
+	 */
+	public function map_page(): void {
+		MembersMap::enqueue_scripts_and_styles();
+		echo '
+		<div class="wrap">
+			<h1>' . esc_html( get_admin_page_title() ) . '</h1>
+			<main id="map"></main>
+		</div>';
 	}
 }
