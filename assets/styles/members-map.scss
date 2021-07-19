@@ -15,6 +15,7 @@ html {
 		"Segoe UI Symbol",
 		"Noto Color Emoji";
 
+	--green: #00a32a;
 	--red: rgb(235, 42, 42);
 }
 
@@ -22,6 +23,20 @@ body.learnyboxmap-standalone {
 	width: 100%;
 	max-width: 1000px;
 	margin: 0 auto;
+
+	p.notice {
+		margin: 0.5rem 0 1rem;
+		padding: 0.5rem 1rem;
+		border: 1px solid #c3c4c7;
+		border-left-width: 5px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+		font-weight: 700;
+		border-left-color: var(--green);
+
+		&.notice-error {
+			border-left-color: var(--red);
+		}
+	}
 }
 
 main#map {

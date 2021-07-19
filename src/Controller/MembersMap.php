@@ -37,7 +37,10 @@ class MembersMap {
 	}
 
 	/**
-	 * Add 2 query vars: 1-st to load page, 2-nd to pass it a LearnyBox member.
+	 * Add 3 query vars:
+	 * 1. to load page,
+	 * 2. to pass it a LearnyBox member,
+	 * 3. to pass it a register status: error, created or updated.
 	 *
 	 * @param array $query_vars List of allowed query variables (GET and POST).
 	 */
@@ -46,6 +49,10 @@ class MembersMap {
 
 		if ( ! in_array( 'member', $query_vars, true ) ) {
 			$query_vars[] = 'member';
+		}
+
+		if ( ! in_array( 'register_status', $query_vars, true ) ) {
+			$query_vars[] = 'register_status';
 		}
 
 		return $query_vars;
@@ -115,6 +122,7 @@ class MembersMap {
 		$v                           = new \stdClass();
 		$v->is_form_validation       = false === empty( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$v->is_registration_complete = 'publish' === get_post_status( $member );
+		$v->register_status          = $wp->query_vars['register_status'] ?? '';
 		$v->consent_text             = Option::get( 'consent_text' );
 
 		$v->members = wp_json_encode(
@@ -132,25 +140,30 @@ class MembersMap {
 		);
 
 		// Prepare the Form data:
-		// - either from Member post (case of a first request)
-		// - either from $_POST (case of a submitted form).
+		// - either from $_POST (case of a submitted form)
+		// - either from Member post (case of a first request).
 		$v->form = $v->is_form_validation
 			? MemberTransformer::post_to_form( $v->categories )
 			: MemberTransformer::wp_to_form( $member );
 
 		$v->form->nonce = self::NONCE_KEY;
 
-		// If form has no error => update and publish the Member.
-		if ( $v->is_form_validation && array() === $v->form->errors ) {
-			$repo->update_by_form_data( $member, $v->form );
+		if ( $v->is_form_validation ) {
+			if ( $v->form->errors ) {
+				$v->register_status = 'error';
+			} else {
+				// If form has no error => update and publish the Member.
+				$repo->update_by_form_data( $member, $v->form );
 
-			$args = array(
-				'learnyboxmap_page_membersmap' => 1,
-				'member'                       => $v->form->member,
-			);
+				$args = array(
+					'learnyboxmap_page_membersmap' => 1,
+					'member'                       => $v->form->member,
+					'register_status'              => $v->is_registration_complete ? 'updated' : 'created',
+				);
 
-			if ( wp_safe_redirect( add_query_arg( $args, '/' ) ) ) {
-				exit;
+				if ( wp_safe_redirect( add_query_arg( $args, '/' ) ) ) {
+					exit;
+				}
 			}
 		}
 

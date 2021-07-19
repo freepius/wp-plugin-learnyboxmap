@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-07-19T13:15:43+02:00\n"
+"POT-Creation-Date: 2021-07-19T14:31:24+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0-alpha-8895ea9\n"
 "X-Domain: learnyboxmap\n"
@@ -154,6 +154,7 @@ msgid "Fields marked with <b>*</b> are required."
 msgstr ""
 
 #: members_map/member_register.php:40
+#: members_map/public_standalone.php:41
 msgid "There are errors in the form. Please correct them to continue. "
 msgstr ""
 
@@ -218,5 +219,14 @@ msgid "Validate"
 msgstr ""
 
 #: members_map/public_standalone.php:28
+#: members_map/public_standalone.php:29
 msgid "The members map"
+msgstr ""
+
+#: members_map/public_standalone.php:42
+msgid "You have been successfully registered on tha map. "
+msgstr ""
+
+#: members_map/public_standalone.php:43
+msgid "Your profile has been successfully updated. "
 msgstr ""

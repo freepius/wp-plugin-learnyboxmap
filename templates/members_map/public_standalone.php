@@ -13,6 +13,7 @@ namespace LearnyboxMap;
  * @param array         $vars                      All the below/template variables
  * @param \stdClass     $form                      Form data of the current member
  * @param bool          $is_registration_complete  Has the current member completed his registration on Members Map?
+ * @param string        $register_status           Was the member registration in 'error' or correctly 'created' or 'updated'?
  * @param string        $consent_text              The consent text for registration.
  * @param \WP_Term[]    $categories                The available member categories.
  * @param string        $members                   All the registered members (excepted the current one) encoded as javascript array.
@@ -34,6 +35,22 @@ wp_enqueue_editor();
 		?>
 	</head>
 	<body class="learnyboxmap-standalone">
+
+	<?php
+	$message = array(
+		'error'   => __( 'There are errors in the form. Please correct them to continue. ', 'learnyboxmap' ),
+		'created' => __( 'You have been successfully registered on tha map. ', 'learnyboxmap' ),
+		'updated' => __( 'Your profile has been successfully updated. ', 'learnyboxmap' ),
+	);
+
+	if ( array_key_exists( $register_status, $message ) ) {
+		printf(
+			'<p class="notice notice-%s">%s</p>',
+			esc_attr( $register_status ),
+			esc_html( $message[ $register_status ] )
+		);
+	}
+	?>
 
 	<main id="map"></main>
 

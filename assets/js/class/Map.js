@@ -62,10 +62,7 @@ export default class {
 	constructor( members, categories, latlng ) {
 		this.#map = L.map( 'map', this.#mapOptions );
 		this.members = new Members( this.#map, members, categories );
-
-		if ( latlng ) {
-			this.currentMember = new CurrentMember( this.#map, latlng );
-		}
+		this.currentMember = new CurrentMember( this.#map, latlng );
 
 		this.#addBaseLayers();
 

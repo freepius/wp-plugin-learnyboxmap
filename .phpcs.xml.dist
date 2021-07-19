@@ -106,6 +106,13 @@
 		</properties>
 	</rule>
 
+	<!-- Deactivate some rules for plugin templates -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>template</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
+		<exclude-pattern>template</exclude-pattern>
+	</rule>
 
 	<!--
 	#############################################################################
