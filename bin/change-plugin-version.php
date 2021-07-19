@@ -6,8 +6,8 @@
  * @package LearnyboxMap
  */
 
-$old = '1.0.0';
-$new = '1.0.1';
+$old = '1.0.1';
+$new = '1.1.0';
 $dir = \dirname(__FILE__) . '/../';
 
 $filesPatterns = [

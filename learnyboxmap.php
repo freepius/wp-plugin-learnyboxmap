@@ -14,7 +14,7 @@
  * Plugin Name:       LearnyboxMap
  * Plugin URI:        https://github.com/freepius/wp-plugin-learnybox-map
  * Description:       LearnyboxMap allows your LearnyBox members to be displayed on an interactive map and see other members there.
- * Version:           1.0.1
+ * Version:           1.1.0
  * Requires at least: 5.6
  * Requires PHP:      7.4
  * Author:            freepius
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || die;
 
 require __DIR__ . '/vendor/autoload.php';
 
-define( 'LEARNYBOXMAP_VERSION', '1.0.1' );
+define( 'LEARNYBOXMAP_VERSION', '1.1.0' );
 define( 'LEARNYBOXMAP_URL', plugin_dir_url( __FILE__ ) );
 define( 'LEARNYBOXMAP_PATH', plugin_dir_path( __FILE__ ) );
 define( 'LEARNYBOXMAP_REL_PATH', trailingslashit( plugin_basename( __DIR__ ) ) );
