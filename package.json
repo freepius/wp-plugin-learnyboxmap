@@ -1,6 +1,6 @@
 {
   "name": "learnyboxmap",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "LearnyboxMap allows your LearnyBox members to be displayed on an interactive map and see other members there.",
   "author": "freepius",
   "license": "GPL-3.0",
@@ -22,7 +22,7 @@
     "leaflet-providers": "^1.12.0"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^15.0.1"
+    "@wordpress/scripts": "^30.10.0"
   },
   "scripts": {
     "build": "wp-scripts build assets/js/*.js --output-path=assets/build",
